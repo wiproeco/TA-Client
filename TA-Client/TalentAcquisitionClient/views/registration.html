@@ -1,0 +1,150 @@
+﻿    <div class="container" ng-controller="RegistrationController">
+        <div class="row well">
+            <div class="page-header">
+                <h1>Registration Form</h1>
+            </div>
+            <div id="successMessage" class="row well">
+                <h3 class="text-success">Registration details have been saved!</h3>
+            </div>
+            <div ng-hide="registrationSuccess" id="registrationForm">
+                <form name="regForm" class="form-horizontal" method="post" ng-submit="Save()" novalidate>
+                    <div class="form-group" ng-class="{ 'has-error' : regForm.firstName.$invalid && !regForm.firstName.$pristine }">
+                        <label for="firstName" class="col-sm-2 control-label">First Name:</label>
+                        <div class="col-sm-6">
+                            <input type="text" name="firstName" id="firstName" class="form-control" placeholder="First Name" ng-model="candidate.firstName" ng-required="true" ng-maxlength="100">
+                        </div>
+                        <!--<p ng-show="regForm.firstName.$error.required" class="help-block">First Name is required.</p>-->
+                    </div>
+
+                    <div class="form-group" ng-class="{ 'has-error' : regForm.lastName.$invalid && !regForm.lastName.$pristine }">
+                        <label for="lastName" class="col-sm-2 control-label">Last Name:</label>
+                        <div class="col-sm-6">
+                            <input type="text" name="lastName" class="form-control" id="lastName" placeholder="Last Name" ng-model="candidate.lastName" ng-required="true" ng-maxlength="100">
+                        </div>
+                        <!--<p ng-show="regForm.lastName.$error.required" class="help-block">Last Name is required.</p>-->
+                    </div>
+
+                    <div class="form-group" ng-class="{ 'has-error' : regForm.email.$invalid && !regForm.email.$pristine }">
+                        <label for="email" class="col-sm-2 control-label">Email:</label>
+                        <div class="col-sm-6">
+                            <input type="email" name="email" class="form-control" id="email" placeholder="Email" ng-model="candidate.email" ng-required="true" ng-maxlength="100">
+                        </div>
+                        <!--<p ng-show="regForm.email.$error.required" class="help-block">Email is required.</p>-->
+                    </div>
+
+                    <div class="form-group" ng-class="{ 'has-error' : regForm.telephone.$invalid && !regForm.telephone.$pristine }">
+                        <label for="telephone" class="col-sm-2 control-label">Contact Number:</label>
+                        <div class="col-sm-6">
+                            <input type="text" name="telephone" class="form-control" id="telephone" placeholder="Contact Number" ng-model="candidate.telephone" ng-required="true" ng-maxlength="100">
+                        </div>
+                        <!--<p ng-show="regForm.telephone.$error.required" class="help-block">Contact Number is required.</p>-->
+                    </div>
+
+                    <div class="form-group">
+                        <label for="" class="col-sm-2 control-label">Gender:</label>
+                        <div class="col-sm-6">
+                            <label class="radio-inline">
+                                <input type="radio" name="gender" id="gender" value="male" ng-model="candidate.gender" ng-required="true">Male
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="gender" id="gender" value="female" ng-model="candidate.gender" ng-required="true">Female
+                            </label>
+                            <!--<p ng-show="regForm.gender.$error.required" class="help-block">Gender is required.</p>-->
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="qualification" class="col-sm-2 control-label">Qualification:</label>
+                        <div class="col-sm-6">
+                            <select class="form-control" id="qualification" name="qualification" ng-model="candidate.qualification" ng-required="true">
+                                <option value="">Please Select</option>
+                                <option value="BTech">BTech</option>
+                                <option value="MTech">MTech</option>
+                                <option value="MCA">MCA</option>
+                                <option value="PHD">PHD</option>
+                                <option value="Other">Other</option>
+                            </select>
+                            <!--<p ng-show="regForm.qualification.$error.required" class="help-block">Qualification is required.</p>-->
+                        </div>
+                    </div>
+                    <div class="form-group" ng-class="{ 'has-error' : regForm.experience.$invalid && !regForm.experience.$pristine }">
+                        <label for="lastName" class="col-sm-2 control-label">Experience in Years (For Ex: 8 [or] 8.5):</label>
+                        <div class="col-sm-6">
+                            <input type="number" name="experience" class="form-control" id="experience" placeholder="Experience in Years (For Ex: 8 [or] 8.5)" ng-model="candidate.experience" ng-maxlength="4">
+                        </div>
+                        <!--<p ng-show="regForm.experience.$error.maxlength" class="help-block">Please enter valid experience.</p>-->
+                    </div>
+                    <div class="form-group">
+                        <label for="skillSet" class="col-sm-2 control-label">Skill Sets:</label>
+                        <div class="col-sm-6">
+                            <input type="text" name="skillSet" class="form-control" id="skillSet" placeholder="Skill Sets" ng-model="candidate.skillSet">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="lateralHire" class="col-sm-2 control-label">Lateral Hire:</label>
+                        <div class="col-sm-6">
+                            <label class="radio-inline">
+                                <input type="radio" name="lateralHire" id="lateralHireYes" value="Yes" ng-model="candidate.lateralHire" ng-required="true">Yes
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="lateralHire" id="lateralHireNo" value="No" ng-model="candidate.lateralHire" ng-required="true">No
+                            </label>
+                            <!--<p ng-show="regForm.lateralHire.$error.required" class="help-block">Lateral Hire is required.</p>-->
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="currentEmployer" class="col-sm-2 control-label">Current Employer:</label>
+                        <div class="col-sm-6">
+                            <input type="text" name="currentEmployer" class="form-control" id="currentEmployer" placeholder="Current Employer" ng-disabled="candidate.lateralHire != 'Yes'" ng-model="candidate.currentEmployer">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="agency" class="col-sm-2 control-label">Out Side Agency:</label>
+                        <div class="col-sm-6">
+                            <label class="radio-inline">
+                                <input type="radio" name="agency" id="agencyYes" value="agencyYes" ng-model="candidate.agency" ng-required="true">Yes
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="agency" id="agencyNo" value="agencyNo" ng-model="candidate.agency" ng-required="true">No
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="agencyName" class="col-sm-2 control-label">Agency Name:</label>
+                        <div class="col-sm-6">
+                            <input type="text" name="agencyName" class="form-control" id="agencyName" placeholder="Agency Name" ng-disabled="candidate.agency != 'agencyYes'" ng-model="candidate.agencyName">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="" class="col-sm-2 control-label">Referal:</label>
+                        <div class="col-sm-6">
+                            <label class="radio-inline">
+                                <input type="radio" name="referal" id="referalYes" value="referalYes" ng-model="candidate.referal">Yes
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="referal" id="referalNo" value="referalNo" ng-model="candidate.referal">No
+                            </label>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="referalName" class="col-sm-2 control-label">Referal Name:</label>
+                        <div class="col-sm-6">
+                            <input type="text" name="referalName" ng-disabled="candidate.referal != 'referalYes'" ng-model="candidate.referalName" class="form-control" id="referalName" placeholder="Referal Name">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-primary" id="register" ng-disabled="regForm.$invalid">Register</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div><!-- end for class "row" -->
+    </div><!-- end for class "container" -->
+
+
+

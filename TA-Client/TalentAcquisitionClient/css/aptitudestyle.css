@@ -1,0 +1,121 @@
+﻿
+h1{
+    color:#740808;
+    font-weight:normal;
+    text-align: center;
+}
+h2{
+    font-weight:normal;
+}
+
+hr{
+    border:none;
+    border-top:1px solid #ccc;
+    background:none;
+    margin-bottom:2px;
+}
+
+.header-right{
+    padding-top:12px;
+    text-align:right;
+}
+
+.center{
+    text-align:center;
+}
+
+.right{
+    text-align:right;
+}
+
+.option{
+    background-color:#cadaee;
+    font-size:20px;
+    padding:10px;
+    margin:3px;
+}
+
+.option label{
+    font-weight:normal;
+}
+    #quiz .options input[type=checkbox] {
+        background-color:#eee;
+        border:1px solid #ccc;
+        height:22px;
+        width:22px;
+    }
+
+    .quizNav {
+        margin:20px 0 0 0;
+        text-align:center;
+    }
+    .quizNav ul{
+        margin:0;
+    }
+
+    .quizNav ul li{
+        display:inline-block;
+        list-style-type:none;
+    }
+
+.answered {
+    background-color:#ccffcc;
+    border:1px solid #aaeeaa;
+    margin:2px 0;
+    padding:12px;
+}
+
+.not-answered {
+    background-color:#ffcccc;
+    border:1px solid #eeaaaa;
+    margin:2px 0;
+    padding:12px;
+}
+
+#instruction {
+    width:80%; 
+    padding-bottom:10px;
+}
+
+#instruction h4 {
+    font-weight: bold;
+}
+
+.start {
+    text-align: center;
+}
+
+.start button {
+    padding-left: 50px; 
+    padding-right: 50px; 
+    font-weight: bold; 
+    font-size: large;
+}
+
+.title {
+    color:blue; 
+    background-color:white; 
+    text-align:center
+}
+
+@media only screen and (max-width: 480px) {
+    h1,.h1{
+        font-size:22px;
+    }
+    h2,.h2{
+        font-size:20px;
+    }
+    h3,.h3{
+        font-size:18px;
+    }
+    .option {
+        font-size: 16px;
+        padding: 6px;
+    }
+}
+
+.msgWarning{
+    text-align:center;
+    margin: 150px 30px 0 0;
+    
+}

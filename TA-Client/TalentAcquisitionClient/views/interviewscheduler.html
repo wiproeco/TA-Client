@@ -1,0 +1,97 @@
+﻿<div class="container" ng-controller="InterviewSchedulerController">
+    <div class="row well">
+        <div class="page-header">
+            <h1>Interview Scheduler</h1>
+        </div>
+        <!--<div id="successMessage" class="row well">
+            <h3 class="text-success">Registration details have been saved!</h3>
+        </div>-->
+        <div>
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <div class="container">
+                        <div class="form-group col-sm-3">
+                            <label for="SelectCandidate" class="input-lg">Select Candidate</label>
+                        </div>
+                        <div class="col-sm-4">
+                            <angucomplete id="ex1" placeholder="Select Candidate(s)" pause="100" selectedobject="selectedCandidate" localdata="empData"
+                                          searchfields="name" titlefield="name" minlength="1" inputclass="form-control form-control-xs"
+                                          matchclass="highlight" />
+                        </div>
+                        <div class="form-group col-sm-3">
+                            <label for='lblSelectPanelError' class="label label-danger"></label>
+                        </div>
+                    </div>
+
+                    <div class="container">
+                        <div class="form-group col-sm-4">
+                            <label class="btn btn-primary" ng-model="scheduler.test" uib-btn-radio="'Test'">Aptitude Test</label>
+                            <label class="btn btn-primary" ng-model="scheduler.test" uib-btn-radio="'Interview'">Interview</label>
+                        </div>
+                    </div>
+                    <div class="container" ng-show="scheduler.test != null">
+                        <!--<div class="row">-->
+                            <div class="form-group col-sm-3">
+                                <label for="InterviewDate" class="input-lg">{{scheduler.test }} Date</label>
+                            </div>
+                            <div class="col-sm-4">
+                                <input type='text' class="textalign form-control" name="InterviewDate" id='dateTimePickerCtrl1' ng-blur='ClearDateTimePickerError()' />
+                                <script type="text/javascript">
+                                    $(function () {
+                                        $('#dateTimePickerCtrl1').datetimepicker();
+                                    });
+                                </script>
+                            </div>
+                            <div class="form-group col-sm-3">
+                                <label for='lbldateTimePickerCtrlError1' class="label label-danger"></label>
+                            </div>
+                        <!--</div>-->
+                        <!--<div class="row">
+                            <div class="form-group col-sm-2">
+                                <label for="InterviewDate" class="input-lg">{{scheduler.test }}Date</label>
+                            </div>
+                            <div class="col-sm-4">
+                                <input type='text' class="textalign form-control" name="InterviewDate" id='dateTimePickerCtrl2' ng-blur='ClearDateTimePickerError()' />
+                                <script type="text/javascript">
+                                    $(function () {
+                                        $('#dateTimePickerCtrl2').datetimepicker();
+                                    });
+                                </script>
+                            </div>
+                            <div class="form-group col-sm-2">
+                                <label for='lbldateTimePickerCtrlError2' class="label label-danger"></label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-sm-2">
+                                <label for="InterviewDate" class="input-lg">{{scheduler.test }}Date</label>
+                            </div>
+                            <div class="col-sm-4">
+                                <input type='text' class="textalign form-control" name="InterviewDate" id='dateTimePickerCtrl3' ng-blur='ClearDateTimePickerError()' />
+                                <script type="text/javascript">
+                                    $(function () {
+                                        $('#dateTimePickerCtrl3').datetimepicker();
+                                    });
+                                </script>
+                            </div>
+                            <div class="form-group col-sm-2">
+                                <label for='lbldateTimePickerCtrlError3' class="label label-danger"></label>
+                            </div>
+                        </div>-->
+                    </div>
+                    <hr>
+                    <div class="container">
+                        <div class="row">
+                            <div class="form-group col-sm-4">
+                                <button class="btn btn-success" ng-show="scheduler.test != null" ng-click="onSubmit(scheduler);" ng-disabled="error || incomplete">
+                                    <span class="glyphicon glyphicon-save"></span>  Submit
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- end for class "row" -->
+</div><!-- end for class "container" -->

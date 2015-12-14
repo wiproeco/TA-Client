@@ -1,0 +1,40 @@
+D:\Workspace\AngularJS\TalentAcquisitionClient\TalentAcquisitionClient\bin\roslyn\csc.exe
+D:\Workspace\AngularJS\TalentAcquisitionClient\TalentAcquisitionClient\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+D:\Workspace\AngularJS\TalentAcquisitionClient\TalentAcquisitionClient\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+D:\Workspace\AngularJS\TalentAcquisitionClient\TalentAcquisitionClient\bin\roslyn\Microsoft.CodeAnalysis.dll
+D:\Workspace\AngularJS\TalentAcquisitionClient\TalentAcquisitionClient\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+D:\Workspace\AngularJS\TalentAcquisitionClient\TalentAcquisitionClient\bin\roslyn\Microsoft.CSharp.Core.targets
+D:\Workspace\AngularJS\TalentAcquisitionClient\TalentAcquisitionClient\bin\roslyn\Microsoft.VisualBasic.Core.targets
+D:\Workspace\AngularJS\TalentAcquisitionClient\TalentAcquisitionClient\bin\roslyn\System.Collections.Immutable.dll
+D:\Workspace\AngularJS\TalentAcquisitionClient\TalentAcquisitionClient\bin\roslyn\System.Reflection.Metadata.dll
+D:\Workspace\AngularJS\TalentAcquisitionClient\TalentAcquisitionClient\bin\roslyn\vbc.exe
+D:\Workspace\AngularJS\TalentAcquisitionClient\TalentAcquisitionClient\bin\roslyn\VBCSCompiler.exe
+D:\Workspace\AngularJS\TalentAcquisitionClient\TalentAcquisitionClient\bin\roslyn\VBCSCompiler.exe.config
+D:\Workspace\AngularJS\TalentAcquisitionClient\TalentAcquisitionClient\bin\TalentAcquisitionClient.dll.config
+D:\Workspace\AngularJS\TalentAcquisitionClient\TalentAcquisitionClient\bin\TalentAcquisitionClient.dll
+D:\Workspace\AngularJS\TalentAcquisitionClient\TalentAcquisitionClient\bin\TalentAcquisitionClient.pdb
+D:\Workspace\AngularJS\TalentAcquisitionClient\TalentAcquisitionClient\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+D:\Workspace\AngularJS\TalentAcquisitionClient\TalentAcquisitionClient\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+D:\Workspace\AngularJS\TalentAcquisitionClient\TalentAcquisitionClient\obj\Debug\TalentAcquisitionClient.csprojResolveAssemblyReference.cache
+D:\Workspace\AngularJS\TalentAcquisitionClient\TalentAcquisitionClient\obj\Debug\TalentAcquisitionClient.dll
+D:\Workspace\AngularJS\TalentAcquisitionClient\TalentAcquisitionClient\obj\Debug\TalentAcquisitionClient.pdb
+\\d-5221\Github\TA- New Layout Integration\TalentAcquisitionClient\TalentAcquisitionClient\bin\roslyn\csc.exe
+\\d-5221\Github\TA- New Layout Integration\TalentAcquisitionClient\TalentAcquisitionClient\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+\\d-5221\Github\TA- New Layout Integration\TalentAcquisitionClient\TalentAcquisitionClient\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+\\d-5221\Github\TA- New Layout Integration\TalentAcquisitionClient\TalentAcquisitionClient\bin\roslyn\Microsoft.CodeAnalysis.dll
+\\d-5221\Github\TA- New Layout Integration\TalentAcquisitionClient\TalentAcquisitionClient\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+\\d-5221\Github\TA- New Layout Integration\TalentAcquisitionClient\TalentAcquisitionClient\bin\roslyn\Microsoft.CSharp.Core.targets
+\\d-5221\Github\TA- New Layout Integration\TalentAcquisitionClient\TalentAcquisitionClient\bin\roslyn\Microsoft.VisualBasic.Core.targets
+\\d-5221\Github\TA- New Layout Integration\TalentAcquisitionClient\TalentAcquisitionClient\bin\roslyn\System.Collections.Immutable.dll
+\\d-5221\Github\TA- New Layout Integration\TalentAcquisitionClient\TalentAcquisitionClient\bin\roslyn\System.Reflection.Metadata.dll
+\\d-5221\Github\TA- New Layout Integration\TalentAcquisitionClient\TalentAcquisitionClient\bin\roslyn\vbc.exe
+\\d-5221\Github\TA- New Layout Integration\TalentAcquisitionClient\TalentAcquisitionClient\bin\roslyn\VBCSCompiler.exe
+\\d-5221\Github\TA- New Layout Integration\TalentAcquisitionClient\TalentAcquisitionClient\bin\roslyn\VBCSCompiler.exe.config
+\\d-5221\Github\TA- New Layout Integration\TalentAcquisitionClient\TalentAcquisitionClient\bin\TalentAcquisitionClient.dll.config
+\\d-5221\Github\TA- New Layout Integration\TalentAcquisitionClient\TalentAcquisitionClient\bin\TalentAcquisitionClient.dll
+\\d-5221\Github\TA- New Layout Integration\TalentAcquisitionClient\TalentAcquisitionClient\bin\TalentAcquisitionClient.pdb
+\\d-5221\Github\TA- New Layout Integration\TalentAcquisitionClient\TalentAcquisitionClient\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+\\d-5221\Github\TA- New Layout Integration\TalentAcquisitionClient\TalentAcquisitionClient\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+\\d-5221\Github\TA- New Layout Integration\TalentAcquisitionClient\TalentAcquisitionClient\obj\Debug\TalentAcquisitionClient.csprojResolveAssemblyReference.cache
+\\d-5221\Github\TA- New Layout Integration\TalentAcquisitionClient\TalentAcquisitionClient\obj\Debug\TalentAcquisitionClient.dll
+\\d-5221\Github\TA- New Layout Integration\TalentAcquisitionClient\TalentAcquisitionClient\obj\Debug\TalentAcquisitionClient.pdb

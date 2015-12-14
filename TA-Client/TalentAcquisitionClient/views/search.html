@@ -1,0 +1,231 @@
+﻿<div ng-controller="SearchController" class="container">
+    <div class="row well">
+        <div class="page-header">
+            <h1>Search</h1>
+        </div>
+        <form name="myForm" ng-submit="myForm.$valid" novalidate>
+          
+            <div class="form-group">
+                <fieldset>
+                    <legend>Primary Selection</legend>
+                    <table class="table-striped">
+                        <thead>
+                            <tr>
+                                <th align="left">From Date </th>
+                                <th align="left">To Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <input type="text" id="startdate" placeholder="Select from date" name="fromDate1" ng-model="fromDate"
+                                           ng-pattern='/^(0?[1-9]|1[012])\/(0?[1-9]|[12][0-9]|3[01])\/(199\d|[2-9]\d{3})$/'
+                                           ui-date="{ dateFormat: 'mm/dd/yyyy' }"
+                                           class="form-control" ng-required="true" />
+                                    <span style="color:red" ng-show="myForm.fromDate1.$error.required">FromDate Required!</span>
+                                    <span style="color:red" ng-show="myForm.fromDate1.$error.pattern">Incorrect Format, should be MM/DD/YYYY!</span>
+                                </td>
+                                <td>
+                                    <input type="text" ng-model="toDate" id="enddate" name="toDate1" placeholder="Select Todate" ng-pattern='/^(0?[1-9]|1[012])\/(0?[1-9]|[12][0-9]|3[01])\/(199\d|[2-9]\d{3})$/'
+                                           ui-date="{ dateFormat: 'mm/dd/yyyy' }"
+                                           class="form-control" ng-required="true" />
+                                    <span style="color:red" ng-show="myForm.toDate1.$error.required">ToDate Required!</span>
+                                    <span style="color:red" ng-show="myForm.toDate1.$error.pattern">Incorrect Format, should be MM/DD/YYYY!</span>
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </fieldset>
+            </div>
+            <div class="form-group">
+                <fieldset>
+                    <legend>Secondary Selection</legend>
+                    <table class="table table-striped" style="width:98%;">
+                        <thead>
+                            <tr>
+                                <th align="left">
+                                    Skill Set
+                                </th>
+                                <th align="left">
+                                    Experience
+                                </th>
+                                <th align="left">
+                                    Qualifications
+                                </th>
+                                <th align="left">
+                                    Name
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <select multiple="multiple" class="form-control" ng-model="skils">
+                                        <option value="C#">C#</option>
+                                        <option value="ASP.NET">ASP.NET</option>
+                                        <option value="MVC">MVC</option>
+                                        <option value="WCF">WCF</option>
+                                        <option value="WPF">WPF</option>
+                                        <option value="Java">Java</option>
+                                        <option value="SAP">SAP</option>
+                                        <option value="AngularJS">AngularJS</option>
+                                        <option value="SilverLight">SilverLight</option>
+                                        <option value="SQLServer">SQLServer</option>
+                                        <option value="Oracle">Oracle</option>
+                                        <option value="MySQL">MySQL</option>
+                                        <option value="PHP">PHP</option>
+                                        <option value="JavaScript">JavaScript</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    Years
+                                    <select class="form-control" ng-model="expyears">
+                                        <option value=0>0</option>
+                                        <option value=1>1</option>
+                                        <option value=2>2</option>
+                                        <option value=3>3</option>
+                                        <option value=4>4</option>
+                                        <option value=5>5</option>
+                                        <option value=6>6</option>
+                                        <option value=7>7</option>
+                                        <option value=8>8</option>
+                                        <option value=9>9</option>
+                                        <option value=10>10</option>
+                                        <option value=11>11</option>
+                                        <option value=12>12</option>
+                                        <option value=13>13</option>
+                                        <option value=14>14</option>
+                                        <option value=15>15</option>
+                                    </select>
+                                    Months
+                                    <select class="form-control" ng-model="expmonths">
+                                        <option value=0>0</option>
+                                        <option value=1>1</option>
+                                        <option value=2>2</option>
+                                        <option value=3>3</option>
+                                        <option value=4>4</option>
+                                        <option value=5>5</option>
+                                        <option value=6>6</option>
+                                        <option value=7>7</option>
+                                        <option value=8>8</option>
+                                        <option value=9>9</option>
+                                        <option value=10>10</option>
+                                        <option value=11>11</option>
+                                        <option value=12>12</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="text" placeholder="Enter Qualification" name="Qualification" ng-model="Qualification" class="form-control" ng-pattern="/^[a-zA-Z]*$/" ng-maxlength="5" />
+                                    <span style="color:red" ng-show="myForm.Qualification.$error.pattern">Qualification must be alphabets</span>
+                                    <span style="color:red" ng-show="myForm.Qualification.$error.maxlength">
+                                        Qualification length must not exceed 5 Letters!
+                                    </span>
+                                </td>
+                                <td>
+                                    <input type="text" placeholder="Enter Name" name="empname" ng-model="EmpName" class="form-control" ng-pattern="/^[a-zA-Z]*$/" />
+                                    <span style="color:red" ng-show="myForm.empname.$error.pattern">Name must be in letters!</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <thead>
+                            <tr>
+                                <th align="left">
+                                    Telephone
+                                </th>
+                                <th align="left">
+                                    Rating in interview
+                                </th>
+                                <th align="left">
+                                    Date of joining
+                                </th>
+                                <th align="left">
+                                    Currently working
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <input type="text" placeholder="Enter Telephone No." ng-model="Telephone" name="phone" class="form-control" ng-minlength="10" ng-maxlength="10" />
+                                    <span class="help-block" style="color:red" ng-show="((myForm.phone.$error.minlength || myForm.phone.$error.maxlength) && myForm.phone.$dirty) ">phone number should be 10 digits</span>
+                                </td>
+                                <td>
+                                    <input type="number" name="Rating" placeholder="Enter Rating in Interview" ng-model="Rating" class="form-control" min="1" max="10" />
+                                    <span style="color:red" ng-show="myForm.Rating.$error.min || myForm.Rating.$error.max">
+                                        Rating must between 1 to 10 !
+                                    </span>
+                                </td>
+
+                                <td> <input type="text" id="doj" placeholder="Enter DOJ" ng-model="DOJ" class="form-control" /> </td>
+                                <td>
+                                    <input type="text" name="Currentlyworking" placeholder="Enter Currently Working" ng-model="Currentlyworking" class="form-control" ng-pattern="/^[a-zA-Z]*$/" />
+                                    <span style="color:red" ng-show="myForm.Currentlyworking.$error.pattern"> Company Name must be in letters!</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </fieldset>
+            </div>
+            <br\>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success" ng-disabled="myForm.$invalid" ng-click="click()">Search</button>
+                    <button class="btn btn-success" ng-click="clear()">Clear</button>
+
+                </div>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th align="left">Name</th>
+                            <th align="left">SkillSet</th>
+                            <th align="left">Experience</th>
+                            <th align="left">Email</th>
+                            <th align="left">Qualification</th>
+                            <th align="left">Current Employer</th>
+                            <th align="left">Telephone</th>
+                            <th align="left">Rating</th>
+                            <th align="left">DateOfJoining</th>
+                            <th align="left">CurrentlyWorking</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="x in result">
+
+                            <td>
+                                {{x.firstName}}
+                            </td>
+                            <td>
+                                {{x.skillSet}}
+                            </td>
+                            <td>
+                                {{x.experience}}
+                            </td>
+                            <td>
+                                {{x.email}}
+                            </td>
+                            <td>
+                                {{x.qualification}}
+                            </td>
+                            <td>
+                                {{x.currentEmployer}}
+                            </td>
+                            <td>
+                                {{x.telephone}}
+                            </td>
+                            <!--<td>
+                                {{x.Rating}}
+                            </td>
+                            <td>
+                                {{x.DateOfJoining}}
+                            </td>
+                            <td>
+                                {{x.CurrentlyWorking}}
+                            </td>-->
+
+                        </tr>
+                    </tbody>
+                </table>
+        </form>
+    </div>
+</div>
