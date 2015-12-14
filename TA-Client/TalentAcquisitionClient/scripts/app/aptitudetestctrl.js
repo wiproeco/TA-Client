@@ -2,6 +2,7 @@
     $scope.questionUrl = 'http://localhost:3113/aptitudetest/';
     $scope.testSubmitUrl = 'http://localhost:3113/aptitudetestsubmit/';
     $scope.sendEmailUrl = 'http://localhost:3113/sendemail';
+    $scope.getTestSlotUrl = 'http://localhost:3113/aptitudetestslot';
     $scope.mode = 'instructions';
     $scope.itemsPerPage = 1;
     $scope.candidateID = $location.search()['cid'];
@@ -9,8 +10,24 @@
     var dd = today.getDate();
     var mm = today.getMonth() + 1;
     var yyyy = today.getFullYear();
-    $scope.isTestDate = ($location.search()['testdt'] == dd.toString() + mm.toString() + yyyy.toString());
-    $scope.hrEmailID = 'v-lasola@microsoft.com';
+    
+    $scope.isTestDate = getTestSlot($scope.getTestSlotUrl);
+    $scope.hrEmailID = 'v-shkad@microsoft.com';
+
+    function getTestSlot(testSlotUrl) {
+        $http({
+            url: testSlotUrl,
+            method: "GET",
+            params: { "candidateid": $scope.candidateID }
+        }).then(function (res) {
+            $scope.testSlot = res.data[0].testslot;
+            if (($scope.testSlot == dd.toString() + mm.toString() + yyyy.toString()))
+                 return true;
+             else
+                 return false;
+         })
+    }
+
     $scope.loadQuiz = function (questionUrl) {
         $http.get(questionUrl)
          .then(function (res) {
