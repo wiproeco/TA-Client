@@ -30,7 +30,7 @@
                 $scope.isTestDate = false;
         })
     };
-    $scope.validateTestSlot();
+    //$scope.validateTestSlot();
 
     $scope.loadQuiz = function (questionUrl) {
         $http.get(questionUrl)
