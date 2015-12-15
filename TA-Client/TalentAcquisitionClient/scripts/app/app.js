@@ -101,117 +101,138 @@ talentAcquisitionApp.controller('SearchController', function ($scope, $http) {
     }
 });
 
-talentAcquisitionApp.controller('PanelSelectionController', function ($scope, $http) {
-    
+talentAcquisitionApp.controller('PanelSelectionController', function ($scope, $http, $filter) {
+
     $(function () {
         $('#dateTimePickerCtrl').datetimepicker();
     });
 
     $scope.people = [
-        {firstName: "Daryl", surname: "Rowland", twitter: "@darylrowland", pic: "img/daryl.jpeg"},
-        {firstName: "Alan", surname: "Partridge", twitter: "@alangpartridge", pic: "img/alanp.jpg"},
-        {firstName: "Annie", surname: "Rowland", twitter: "@anklesannie", pic: "img/annie.jpg"}
+        { firstName: "Daryl", surname: "Rowland", twitter: "@darylrowland", pic: "img/daryl.jpeg" },
+        { firstName: "Alan", surname: "Partridge", twitter: "@alangpartridge", pic: "img/alanp.jpg" },
+        { firstName: "Annie", surname: "Rowland", twitter: "@anklesannie", pic: "img/annie.jpg" }
     ];
 
     $scope.selectedEmployees = [];
     $scope.selectedEmployeesId;
 
-    $scope.sendEmail = function(msg) {
-        if($('#dateTimePickerCtrl').val()==null || $('#dateTimePickerCtrl').val()=="")
-        {                  
+    $scope.sendEmail = function (msg) {
+        if ($('#dateTimePickerCtrl').val() == null || $('#dateTimePickerCtrl').val() == "") {
             jQuery("label[for='lbldateTimePickerCtrlError']").html("This field is required");
             return false;
-        }      
-        var emailTo = "";
-        $scope.selectedEmployees.forEach(function(element) {
-            emailTo += element.EmailID + ";";
+        }
+
+        if ($("#candidateId_value").val() == "") {
+            jQuery("label[for='lblSelectCandidateError']").html("Select candidate name");
+            return false;
+        }
+
+        var emailTo = "", interviewerID = "", interviewerName="";
+        $scope.selectedEmployees.forEach(function (element) {
+            emailTo += element.emailID + ";";
+            interviewerID += element.id + ";";
+            interviewerName += element.fullName + ";";
         }, this);
-        if(emailTo=="")
-        {
+        if (emailTo == "") {
             jQuery("label[for='lblSelectPanelError']").html("Select employee to add");
             return false;
         }
+
+        var dataObj = {
+            candidateID: $scope.selectedCandidate.originalObject.id,
+            interviewDate: $filter('date')(new Date($('#dateTimePickerCtrl').val()), 'ddMMyyyy'),
+            interviewTime: $filter('date')(new Date($('#dateTimePickerCtrl').val()), 'HH:mm'),
+            interviewerID: interviewerID,
+            interviewerName: interviewerName
+        };
+        $http.post('http://localhost:3113/panelsubmit', dataObj);
+
         if (emailTo) {
 
+            var startDate = new Date($('#dateTimePickerCtrl').val());
+            var endDate = new Date(startDate);
+            endDate.setHours(startDate.getHours() + 1);
+
             var confirmURL = "http://localhost:41609/EmployeeConfirmation.html?date=" + $('#dateTimePickerCtrl').val();
-            var emailBody = "Hi,<br/><p> You have been Selected for the Interview Slot.<br/>Please Confirm by Clicking below URL.<br/><a href=\"" + confirmURL +"\">Confirm</a><p><br/>Thanks & Regards,<br/>Admin."
-            var req = {from : "Addmin@wipro.com",to : emailTo,subject : "TA - Employee booked for Interview Slot - " + $('#dateTimePickerCtrl').val(),text:emailBody};
-            $http.post('http://localhost:3113/sendemail', req,
-                 {headers: { 'Content-Type': 'application/json'}})                 
+            var emailBody = "Hi,<br/><p> You have been Selected for the Interview Slot.<br/>Please Confirm by Clicking below URL.<br/><a href=\"" + confirmURL + "\">Confirm</a><p><br/>Thanks & Regards,<br/>Admin."
+            var req = { from: "hrteam@wipro.com", to: emailTo, subject: "TA - Employee booked for Interview Slot - " + $('#dateTimePickerCtrl').val(), text: emailBody, startDate: startDate, endDate: endDate };
+            $http.post('http://localhost:3113/SendEmail', req,
+                 { headers: { 'Content-Type': 'application/json' } })
         }
-        location.reload();  
+        //location.reload();
     };
-        
-    $scope.selectEmployee = function(msg) {
-           
-        if($scope.selectedEmployee==undefined )
-        {                  
-            jQuery("label[for='lblSelectPanelError']").html("Select employee to add");                
+
+    $scope.selectEmployee = function (msg) {
+
+        if ($scope.selectedEmployee == undefined) {
+            jQuery("label[for='lblSelectPanelError']").html("Select employee to add");
             return false;
         }
-        else
-        {
+        else {
             jQuery("label[for='lblSelectPanelError']").html("");
             jQuery("label[for='lblRemovePanelError']").html("");
         }
-        if(!employeeSelected($scope.selectedEmployee.originalObject)){
+        if (!employeeSelected($scope.selectedEmployee.originalObject)) {
             $scope.selectedEmployee.originalObject.timeSlot = $('#dateTimePickerCtrl').val()
             $scope.selectedEmployees.push($scope.selectedEmployee.originalObject);
             displaySelectedEmployee($scope.selectedEmployee.originalObject);
-                
+
         }
         $("#ex1_value").val("");
-        $scope.selectedEmployee=undefined;
+        $scope.selectedEmployee = undefined;
     };
-        
-         
-    $scope.deleteEmployee = function(msg){
-             
-        if($('#employeeSelected option:selected').length == 0){
+
+    $scope.deleteEmployee = function (msg) {
+
+        if ($('#employeeSelected option:selected').length == 0) {
             jQuery("label[for='lblRemovePanelError']").html("Select employee(s) to remove");
             return false;
         }
-        else
-        {
+        else {
             jQuery("label[for='lblRemovePanelError']").html("");
-        }    
-        $('#employeeSelected option:selected').each( function() {
-                      
+        }
+        $('#employeeSelected option:selected').each(function () {
+
             var delEmployee = $(this).text();
             var tempArray = [];
-            tempArray = $.grep($scope.selectedEmployees, function(a){
+            tempArray = $.grep($scope.selectedEmployees, function (a) {
                 return (a.name !== delEmployee)
             });
             $scope.selectedEmployees = tempArray;
             $(this).remove();
         });
     }
-        
-    $scope.ClearDateTimePickerError=function(msg){
+
+    $scope.ClearDateTimePickerError = function (msg) {
         jQuery("label[for='lbldateTimePickerCtrlError']").html("");
     }
-        
-    var employeeSelected = function(obj){
+
+    var employeeSelected = function (obj) {
         var result = false;
-        $scope.selectedEmployees.forEach(function(element) {
-            if(obj.name === element.name){
+        $scope.selectedEmployees.forEach(function (element) {
+            if (obj.name === element.name) {
                 result = true;
             }
         }, this);
         return result;
     }
-        
-    var displaySelectedEmployee = function(obj){
+
+    var displaySelectedEmployee = function (obj) {
         var elem = document.getElementById("employeeSelected");
         var option = document.createElement("option");
         option.text = obj.name;
         elem.add(option);
     }
-        
+
     $http.get("http://localhost:3113/ShowEmployees").then(function (response) {
         $scope.empData = response.data;
         $('#dateTimePickerCtrl').val("");
-    });   
+    });
+
+    $http.get("http://localhost:3113/getcandidates/").then(function (response) {
+        $scope.candidateData = response.data;
+        $('#dateTimePickerCtrl1').val("");
+    });
 });
 
 talentAcquisitionApp.controller('InterviewSchedulerController', function ($scope, $http, $filter) {
@@ -222,9 +243,9 @@ talentAcquisitionApp.controller('InterviewSchedulerController', function ($scope
 
     $scope.getCandidateUrl = 'http://localhost:3113/getcandidates/';
     $scope.submitUrl = 'http://localhost:3113/schedulersubmit/';
-    $scope.sendEmailUrl = 'http://localhost:3113/SendEmail';
+    $scope.sendEmailUrl = 'http://localhost:3113/Sendmail';
     $scope.hrEmailID = 'hrteam@wipro.com';
-    
+
     $scope.ClearDateTimePickerError = function (msg) {
         jQuery("label[for='lbldateTimePickerCtrlError1']").html("");
     }
@@ -252,42 +273,49 @@ talentAcquisitionApp.controller('InterviewSchedulerController', function ($scope
         //    jQuery("label[for='lbldateTimePickerCtrlError3']").html("This field should not be same");
         //    return false;
         //}
+
+        if ($("#candidateId_value").val() == "") {
+            jQuery("label[for='lblSelectCandidateError']").html("Select candidate name");
+            return false;
+        }
+
         var dataObj = {
             candidateID: $scope.selectedCandidate.originalObject.id,
-            candidateName: $("#ex1_value").val(),
-            emailID: $scope.selectedCandidate.originalObject.EmailID,
-            date1: $('#dateTimePickerCtrl1').val()//$filter('date')($('#dateTimePickerCtrl1').val(), 'ddMMyyyy'),
-            //date2: $('#dateTimePickerCtrl2').val(),//$filter('date')(scheduler.date2, 'ddMMyyyy'),
-            //date3: $('#dateTimePickerCtrl3').val() //$filter('date')(scheduler.date3, 'ddMMyyyy'),
+            candidateName: $("#candidateId_value").val(),
+            emailID: $scope.selectedCandidate.originalObject.emailID,
+            testDate: $('#dateTimePickerCtrl1').val(),
+            formatDate: $filter('date')(new Date($('#dateTimePickerCtrl1').val()), 'ddMMyyyy'),
+            formatTime: $filter('date')(new Date($('#dateTimePickerCtrl1').val()), 'HH:mm'),
+            testOrInterview: scheduler.test
         };
         $http.post($scope.submitUrl, dataObj);
-        $scope.SendHttpPostData(dataObj, scheduler.test);
+        $scope.SendHttpPostData(dataObj);
     }
 
     $scope.SendHttpPostData = function (dataObj, test) {
 
         var mailBody = 'Hello ' + dataObj.candidateName + ',<br/>';
         var mailSubject = "";
-        if (test == "Test") {
+        if (dataObj.testOrInterview == "Test") {
 
             mailSubject = 'Aptitude Test Date for candidate: ' + dataObj.candidateName
-            if (dataObj.date1 != "") {
+            if (dataObj.testDate != "") {
 
-                mailBody += '<p> You have a Aptitude test on: ' + dataObj.date1 + '.<br/> Please click on the link .<br/> http://172.25.174.51/#/home?cid=' + dataObj.candidateID + '&testdt=' + dataObj.date1
+                mailBody += '<p> You have a Aptitude test on: ' + dataObj.testDate + '.<br/> Please click on the link .<br/> http://localhost:41609/#/home?cid=' + dataObj.candidateID + '&testdt=' + dataObj.formatDate + '&testtm=' + dataObj.formatTime
             }
             //if (dataObj.date2 != "") {
-            //    mailBody += '<p> You have a Aptitude test on: ' + dataObj.date2 + '.<br/> Please click on the link .<br/> http://172.25.174.68/#/home?cid=' + dataObj.candidateID + '&testdt=' + dataObj.date2
+            //    mailBody += '<p> You have a Aptitude test on: ' + dataObj.date2 + '.<br/> Please click on the link .<br/> http://localhost:41609/#/home?cid=' + dataObj.candidateID + '&testdt=' + dataObj.date2
             //}
             //if (dataObj.date3 != "") {
-            //    mailBody += '<p> You have a Aptitude test on: ' + dataObj.date3 + '.<br/> Please click on the link .<br/> http://172.25.174.68/#/home?cid=' + dataObj.candidateID + '&testdt=' + dataObj.date3
+            //    mailBody += '<p> You have a Aptitude test on: ' + dataObj.date3 + '.<br/> Please click on the link .<br/> http://localhost:41609/#/home?cid=' + dataObj.candidateID + '&testdt=' + dataObj.date3
             //}
 
         }
         else {
             mailSubject = 'Technical Interview Date for candidate: ' + dataObj.candidateName
 
-            if (dataObj.date1 != "") {
-                mailBody += '<p> You have a Technical Interview on: ' + dataObj.date1 + '.'
+            if (dataObj.testDate != "") {
+                mailBody += '<p> You have a Technical Interview on: ' + dataObj.testDate + '.'
             }
             //if (dataObj.date2 != "") {
             //    mailBody += '<p> You have a Technical Interview on: ' + dataObj.date2 + '.'

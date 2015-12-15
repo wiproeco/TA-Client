@@ -14,12 +14,12 @@
                             <label for="SelectCandidate" class="input-lg">Select Candidate</label>
                         </div>
                         <div class="col-sm-4">
-                            <angucomplete id="ex1" placeholder="Select Candidate(s)" pause="100" selectedobject="selectedCandidate" localdata="empData"
-                                          searchfields="name" titlefield="name" minlength="1" inputclass="form-control form-control-xs"
+                            <angucomplete id="candidateId" placeholder="Select Candidate(s)" pause="100" selectedobject="selectedCandidate" localdata="empData"
+                                          searchfields="fullName" titlefield="fullName" minlength="1" inputclass="form-control form-control-xs"
                                           matchclass="highlight" />
                         </div>
                         <div class="form-group col-sm-3">
-                            <label for='lblSelectPanelError' class="label label-danger"></label>
+                            <label for='lblSelectCandidateError' class="label label-danger"></label>
                         </div>
                     </div>
 
@@ -31,20 +31,20 @@
                     </div>
                     <div class="container" ng-show="scheduler.test != null">
                         <!--<div class="row">-->
-                            <div class="form-group col-sm-3">
-                                <label for="InterviewDate" class="input-lg">{{scheduler.test }} Date</label>
-                            </div>
-                            <div class="col-sm-4">
-                                <input type='text' class="textalign form-control" name="InterviewDate" id='dateTimePickerCtrl1' ng-blur='ClearDateTimePickerError()' />
-                                <script type="text/javascript">
+                        <div class="form-group col-sm-3">
+                            <label for="InterviewDate" class="input-lg">{{scheduler.test }} Date</label>
+                        </div>
+                        <div class="col-sm-4">
+                            <input type='text' class="textalign form-control" name="InterviewDate" id='dateTimePickerCtrl1' ng-blur='ClearDateTimePickerError()' />
+                            <script type="text/javascript">
                                     $(function () {
                                         $('#dateTimePickerCtrl1').datetimepicker();
                                     });
-                                </script>
-                            </div>
-                            <div class="form-group col-sm-3">
-                                <label for='lbldateTimePickerCtrlError1' class="label label-danger"></label>
-                            </div>
+                            </script>
+                        </div>
+                        <div class="form-group col-sm-3">
+                            <label for='lbldateTimePickerCtrlError1' class="label label-danger"></label>
+                        </div>
                         <!--</div>-->
                         <!--<div class="row">
                             <div class="form-group col-sm-2">
