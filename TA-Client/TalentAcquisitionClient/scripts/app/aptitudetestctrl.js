@@ -22,15 +22,19 @@
             method: "GET",
             params: { "candidateid": $scope.candidateID }
         }).then(function (res) {
-            $scope.testdate = res.data[0].testdate;
-            $scope.testtime = res.data[0].testtime;
-            if (!($scope.testdate == ("0" + dd.toString()).slice(-2) + ("0" + mm.toString()).slice(-2) + yyyy.toString()))
-                $scope.isTestDate = false;
-            else if (!($scope.testtime == ("0" + hrs.toString()).slice(-2) + ':' + ("0" + mins.toString()).slice(-2)))
-                $scope.isTestDate = false;
+            $scope.employeetype = res.data[0].employeetype;
+            if ($scope.employeetype != 'HR')
+            {
+                $scope.testdate = res.data[0].testdate;
+                $scope.testtime = res.data[0].testtime;
+                if (!($scope.testdate == ("0" + dd.toString()).slice(-2) + ("0" + mm.toString()).slice(-2) + yyyy.toString()))
+                    $scope.isTestDate = false;
+                else if (!($scope.testtime == ("0" + hrs.toString()).slice(-2) + ':' + ("0" + mins.toString()).slice(-2)))
+                    $scope.isTestDate = false;
+            }
         })
     };
-    //$scope.validateTestSlot();
+    $scope.validateTestSlot();
 
     $scope.loadQuiz = function (questionUrl) {
         $http.get(questionUrl)
@@ -84,13 +88,16 @@
             $scope.isPassed = false;
         $scope.scorePercent = $scope.scorePercent + "%";
 
-        var dataObj = {
-            candidateID: $scope.candidateID,
-            score: $scope.scorePercent,
-            isPassed: $scope.isPassed
-        };
-        $http.post($scope.testSubmitUrl, dataObj);
-        $scope.SendHttpPostData($scope.candidateID, $scope.scorePercent);
+        if ($scope.employeetype != 'HR')
+        {
+            var dataObj = {
+                candidateID: $scope.candidateID,
+                score: $scope.scorePercent,
+                isPassed: $scope.isPassed
+            };
+            $http.post($scope.testSubmitUrl, dataObj);
+            $scope.SendHttpPostData($scope.candidateID, $scope.scorePercent);
+        }
     },
      $scope.isCorrect = function (question) {
          var result = 'correct';
