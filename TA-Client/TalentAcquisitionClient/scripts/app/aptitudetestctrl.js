@@ -6,27 +6,31 @@
     $scope.mode = 'instructions';
     $scope.itemsPerPage = 1;
     $scope.candidateID = $location.search()['cid'];
+    $scope.isTestDate = true;
+    $scope.hrEmailID = 'v-shkad@microsoft.com';
+
     var today = new Date();
     var dd = today.getDate();
     var mm = today.getMonth() + 1;
     var yyyy = today.getFullYear();
-    
-    $scope.isTestDate = getTestSlot($scope.getTestSlotUrl);
-    $scope.hrEmailID = 'v-shkad@microsoft.com';
+    var hrs = today.getHours();
+    var mins = today.getMinutes();
 
-    function getTestSlot(testSlotUrl) {
+    $scope.validateTestSlot = function () {
         $http({
-            url: testSlotUrl,
+            url: $scope.getTestSlotUrl,
             method: "GET",
             params: { "candidateid": $scope.candidateID }
         }).then(function (res) {
-            $scope.testSlot = res.data[0].testslot;
-            if (($scope.testSlot == dd.toString() + mm.toString() + yyyy.toString()))
-                 return true;
-             else
-                 return false;
-         })
-    }
+            $scope.testdate = res.data[0].testdate;
+            $scope.testtime = res.data[0].testtime;
+            if (!($scope.testdate == ("0" + dd.toString()).slice(-2) + ("0" + mm.toString()).slice(-2) + yyyy.toString()))
+                $scope.isTestDate = false;
+            else if (!($scope.testtime == ("0" + hrs.toString()).slice(-2) + ':' + ("0" + mins.toString()).slice(-2)))
+                $scope.isTestDate = false;
+        })
+    };
+    $scope.validateTestSlot();
 
     $scope.loadQuiz = function (questionUrl) {
         $http.get(questionUrl)
@@ -45,12 +49,14 @@
 
          });
     },
-     $scope.goTo = function (index) {
+
+    $scope.goTo = function (index) {
          if (index > 0 && index <= $scope.totalItems) {
              $scope.currentPage = index;
              $scope.mode = 'quiz';
          }
-     },
+    },
+
     $scope.isAnswered = function (index) {
         var answered = 'Not Answered';
         $scope.questions[index].Options.forEach(function (element, index, array) {
@@ -70,12 +76,21 @@
             }
         });
         $scope.mode = 'result';
+
+        $scope.scorePercent = parseInt($scope.score) * 100 / parseInt($scope.questions.length);
+        if ($scope.scorePercent >= 50)
+            $scope.isPassed = true;
+        else
+            $scope.isPassed = false;
+        $scope.scorePercent = $scope.scorePercent + "%";
+
         var dataObj = {
             candidateID: $scope.candidateID,
-            score: $scope.score,
+            score: $scope.scorePercent,
+            isPassed: $scope.isPassed
         };
         $http.post($scope.testSubmitUrl, dataObj);
-        $scope.SendHttpPostData($scope.candidateID, $scope.score);
+        $scope.SendHttpPostData($scope.candidateID, $scope.scorePercent);
     },
      $scope.isCorrect = function (question) {
          var result = 'correct';
@@ -95,7 +110,6 @@
          question.Options.forEach(function (element, index, array) {
              if (element.Id != option.Id) {
                  element.Selected = false;
-                 //question.Answered = element.Id;
              }
          });
 
