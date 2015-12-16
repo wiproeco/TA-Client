@@ -129,7 +129,7 @@ talentAcquisitionApp.controller('PanelSelectionController', function ($scope, $h
 
         var emailTo = "", interviewerID = "", interviewerName="";
         $scope.selectedEmployees.forEach(function (element) {
-            emailTo += element.emailID + ";";
+            emailTo += element.email + ";";
             interviewerID += element.id + ";";
             interviewerName += element.fullName + ";";
         }, this);
@@ -282,7 +282,7 @@ talentAcquisitionApp.controller('InterviewSchedulerController', function ($scope
         var dataObj = {
             candidateID: $scope.selectedCandidate.originalObject.id,
             candidateName: $("#candidateId_value").val(),
-            emailID: $scope.selectedCandidate.originalObject.emailID,
+            emailID: $scope.selectedCandidate.originalObject.email,
             testDate: $('#dateTimePickerCtrl1').val(),
             formatDate: $filter('date')(new Date($('#dateTimePickerCtrl1').val()), 'ddMMyyyy'),
             formatTime: $filter('date')(new Date($('#dateTimePickerCtrl1').val()), 'HH:mm'),
@@ -301,7 +301,7 @@ talentAcquisitionApp.controller('InterviewSchedulerController', function ($scope
             mailSubject = 'Aptitude Test Date for candidate: ' + dataObj.candidateName
             if (dataObj.testDate != "") {
 
-                mailBody += '<p> You have a Aptitude test on: ' + dataObj.testDate + '.<br/> Please click on the link .<br/> http://localhost:41609/#/home?cid=' + dataObj.candidateID + '&testdt=' + dataObj.formatDate + '&testtm=' + dataObj.formatTime
+                mailBody += '<p> You have a Aptitude test on: ' + dataObj.testDate + '.<br/> Please click on the link .<br/> http://localhost:11172/#/aptitudetest?cid=' + dataObj.candidateID + '&testdt=' + dataObj.formatDate + '&testtm=' + dataObj.formatTime
             }
             //if (dataObj.date2 != "") {
             //    mailBody += '<p> You have a Aptitude test on: ' + dataObj.date2 + '.<br/> Please click on the link .<br/> http://localhost:41609/#/home?cid=' + dataObj.candidateID + '&testdt=' + dataObj.date2
