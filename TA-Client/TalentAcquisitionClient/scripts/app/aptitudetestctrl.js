@@ -41,7 +41,7 @@
                     $scope.isTestDate = true;
                 }
                 else
-                    $scope.isTestDate = false;
+                $scope.isTestDate = false;
 
             }
         })
@@ -67,10 +67,10 @@
     },
 
     $scope.goTo = function (index) {
-        if (index > 0 && index <= $scope.totalItems) {
-            $scope.currentPage = index;
-            $scope.mode = 'quiz';
-        }
+         if (index > 0 && index <= $scope.totalItems) {
+             $scope.currentPage = index;
+             $scope.mode = 'quiz';
+         }
     },
 
     $scope.isAnswered = function (index) {
@@ -101,12 +101,12 @@
         $scope.scorePercent = $scope.scorePercent + "%";
 
         if ($scope.candidateDetails.employeeType != 'HR') {
-            var dataObj = {
-                candidateID: $scope.candidateID,
-                score: $scope.scorePercent,
-                isPassed: $scope.isPassed
-            };
-            $http.post($scope.testSubmitUrl, dataObj);
+        var dataObj = {
+            candidateID: $scope.candidateID,
+            score: $scope.scorePercent,
+            isPassed: $scope.isPassed
+        };
+        $http.post($scope.testSubmitUrl, dataObj);
             $scope.SendHttpPostData($scope.scorePercent, $scope.isPassed);
         }
     },

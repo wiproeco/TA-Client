@@ -43,9 +43,9 @@ talentAcquisitionApp.config(['$routeProvider',
              templateUrl: 'views/logout.html',
              controller: 'LogoutController'
          }).
-         otherwise({
+        otherwise({
              redirectTo: '/login'
-         });
+        });
   }]);
 
 talentAcquisitionApp.controller('LoginController', function ($scope, $http) {
@@ -302,7 +302,7 @@ talentAcquisitionApp.controller('SearchController', function ($scope, $http) {
         $http.get("http://localhost:3113/search/", { params: { "name": $scope.EmpName, "skillset": encodeURI($scope.skils), "qualification": $scope.Qualification, "fromdate": $scope.fromDate, "todate": $scope.toDate, "telephone": $scope.Telephone, "ratingininterview": $scope.Rating, "doj": $scope.DOJ, "currentlyworking": $scope.Currentlyworking, "exp": exp } })
        .success(function (response) {
            if (response.length > 0) {
-               $scope.result = response;
+           $scope.result = response;           
            } else {
                $scope.result = null;
            }
@@ -324,7 +324,7 @@ talentAcquisitionApp.controller('SearchController', function ($scope, $http) {
 });
 
 talentAcquisitionApp.controller('PanelSelectionController', function ($scope, $http, $filter) {
-
+    
     $("#ContainerForm").show();
     $("#footer").show();
     $(function () {
@@ -338,7 +338,7 @@ talentAcquisitionApp.controller('PanelSelectionController', function ($scope, $h
         if ($('#dateTimePickerCtrl').val() == null || $('#dateTimePickerCtrl').val() == "") {
             jQuery("label[for='lbldateTimePickerCtrlError']").html("This field is required");
             return false;
-        }
+        }      
 
         if ($("#candidateId_value").val() == "") {
             jQuery("label[for='lblSelectCandidateError']").html("Select candidate name");
@@ -379,10 +379,10 @@ talentAcquisitionApp.controller('PanelSelectionController', function ($scope, $h
         }
         //location.reload();
     };
-
+        
     $scope.selectEmployee = function (msg) {
         if ($scope.selectedEmployee == undefined) {
-            jQuery("label[for='lblSelectPanelError']").html("Select employee to add");
+            jQuery("label[for='lblSelectPanelError']").html("Select employee to add");                
             return false;
         }
         else {
@@ -393,23 +393,23 @@ talentAcquisitionApp.controller('PanelSelectionController', function ($scope, $h
             $scope.selectedEmployee.originalObject.timeSlot = $('#dateTimePickerCtrl').val()
             $scope.selectedEmployees.push($scope.selectedEmployee.originalObject);
             displaySelectedEmployee($scope.selectedEmployee.originalObject);
-
+                
         }
         $("#ex1_value").val("");
         $scope.selectedEmployee = undefined;
     };
-
+        
     $scope.deleteEmployee = function (msg) {
-
+             
         if ($('#employeeSelected option:selected').length == 0) {
             jQuery("label[for='lblRemovePanelError']").html("Select employee(s) to remove");
             return false;
         }
         else {
             jQuery("label[for='lblRemovePanelError']").html("");
-        }
+        }    
         $('#employeeSelected option:selected').each(function () {
-
+                      
             var delEmployee = $(this).text();
             var tempArray = [];
             tempArray = $.grep($scope.selectedEmployees, function (a) {
@@ -419,11 +419,11 @@ talentAcquisitionApp.controller('PanelSelectionController', function ($scope, $h
             $(this).remove();
         });
     }
-
+        
     $scope.ClearDateTimePickerError = function (msg) {
         jQuery("label[for='lbldateTimePickerCtrlError']").html("");
     }
-
+        
     var employeeSelected = function (obj) {
         var result = false;
         $scope.selectedEmployees.forEach(function (element) {
@@ -433,18 +433,18 @@ talentAcquisitionApp.controller('PanelSelectionController', function ($scope, $h
         }, this);
         return result;
     }
-
+        
     var displaySelectedEmployee = function (obj) {
         var elem = document.getElementById("employeeSelected");
         var option = document.createElement("option");
         option.text = obj.fullName;
         elem.add(option);
     }
-
+        
     $http.get("http://localhost:3113/ShowEmployees/").then(function (response) {
         $scope.empData = response.data;
         $('#dateTimePickerCtrl').val("");
-    });
+    });   
 
     $http.get("http://localhost:3113/getcandidates/").then(function (response) {
         $scope.candidateData = response.data;
@@ -463,7 +463,7 @@ talentAcquisitionApp.controller('InterviewSchedulerController', function ($scope
     $scope.submitUrl = 'http://localhost:3113/schedulersubmit/';
     $scope.sendEmailUrl = 'http://localhost:3113/Sendmail/';
     $scope.hrEmailID = 'hrteam@wipro.com';
-
+    
     $scope.ClearDateTimePickerError = function (msg) {
         jQuery("label[for='lbldateTimePickerCtrlError1']").html("");
     }
