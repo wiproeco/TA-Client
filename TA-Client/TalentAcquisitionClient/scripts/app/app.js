@@ -7,9 +7,17 @@ var talentAcquisitionApp = angular.module('talentAcquisitionApp', ['ngRoute', 'n
 talentAcquisitionApp.config(['$routeProvider',
   function ($routeProvider) {
       $routeProvider.
+        when('/login', {
+            templateUrl: 'views/login.html',
+            controller: 'LoginController'
+        }).
         when('/registration', {
             templateUrl: 'views/registration.html',
             controller: 'RegistrationController'
+        }).
+        when('/Home', {
+            templateUrl: 'views/Home.html',
+            controller: 'HomeController'
         }).
         when('/search', {
             templateUrl: 'views/search.html',
@@ -23,17 +31,197 @@ talentAcquisitionApp.config(['$routeProvider',
             templateUrl: 'views/interviewscheduler.html',
             controller: 'InterviewSchedulerController'
         }).
+        when('/EmployeeConfirmation', {
+            templateUrl: 'views/EmployeeConfirmation.html',
+            controller: 'EmployeeConfirmationController'
+        }).
         when('/aptitudetest', {
             templateUrl: 'views/aptitudetest.html',
             controller: 'AptitudeTestController'
         }).
-        otherwise({
-            redirectTo: '/registration'
-        });
+         when('/logout', {
+             templateUrl: 'views/logout.html',
+             controller: 'LogoutController'
+         }).
+         otherwise({
+             redirectTo: '/login'
+         });
   }]);
+
+talentAcquisitionApp.controller('LoginController', function ($scope, $http) {
+    //debugger;
+    $("#regScreen").hide();   
+    $("#searchScreen").hide();
+    $("#panelScreen").hide();
+    $("#interviewScreen").hide();
+    $("#employeeConfScreen").hide();
+    $("#logoutScreen").hide();
+    $("#UserName").hide();
+    $scope.login = function () {
+        $http.get("http://localhost:3113/login/", { params: { "userId": $scope.userName, "password": $scope.userPassword } })
+       .success(function (response) {
+           if (response.length != 0) {
+               //alert("Hi");
+               appData = response;
+               location.href = '#Home';
+           }
+           else {
+               alert("Invalid user, please enter correct username and password");
+           }
+       }).error(function (error) {
+           alert(error);
+       });
+    }
+
+});
+
+talentAcquisitionApp.controller('HomeController', function ($scope) {
+    //debugger;
+    
+    var empType = appData[0].employeeType;
+    var empName = appData[0].fullName;
+    sessionStorage.setItem('userID', appData[0].id);
+    var elem = document.getElementById("user");
+    elem.value = empName;
+    //$("#User1").val() = empName;
+    if (empType == "Candidate") {
+        $("#regScreen").hide();
+        $("#ContainerForm").hide();
+        $("#searchScreen").hide();
+        $("#panelScreen").hide();
+        $("#logoutScreen").show();
+        $("#UserName").show();
+        $("#interviewScreen").hide();
+        $("#employeeConfScreen").hide();
+        $("#footer").hide();
+    }
+    else if (empType == "HR") {
+        $("#regScreen").hide();
+        $("#ContainerForm").hide();
+        $("#searchScreen").show();
+        $("#panelScreen").show();
+        $("#interviewScreen").show();
+        $("#logoutScreen").show();
+        $("#UserName").show();
+        $("#employeeConfScreen").hide();
+        $("#footer").hide();
+    }
+
+    else if (empType == "Employee") {
+        $("#regScreen").hide();
+        $("#ContainerForm").hide();
+        $("#searchScreen").hide();
+        $("#panelScreen").hide();
+        $("#interviewScreen").hide();
+        $("#employeeConfScreen").show();
+        $("#logoutScreen").show();
+        $("#UserName").show();
+        $("#footer").hide();
+
+    }   
+})
+
+talentAcquisitionApp.controller('LogoutController', function ($scope) {
+    //debugger;
+    // alert("hi");
+    $("#regScreen").hide();
+    $("#searchScreen").hide();
+    $("#panelScreen").hide();
+    $("#interviewScreen").hide();
+    $("#employeeConfScreen").hide();
+    $("#logoutScreen").hide();
+    $("#UserName").hide();
+    $("#ContainerForm").show();
+    $("#footer").show();
+});
+
+talentAcquisitionApp.controller('EmployeeConfirmationController', function ($scope, $http) {
+    $("#ContainerForm").show();
+    $("#footer").show();
+    var userid = sessionStorage.getItem('userID');
+    $http.get("http://localhost:3113/GetEmployeeInterviewDates/",
+            { params: { "loginid": userid } }).then(function (response) {
+                $scope.Interviewdates = response.data;
+                if ($scope.Interviewdates.length > 0) {
+                    var datetoshow = $scope.Interviewdates[0].date.substring(0, 2) + '/' + $scope.Interviewdates[0].date.substring(2, 4) + '/' + $scope.Interviewdates[0].date.substring(4, 8);
+                    var lbltext = "Are you Available for Interview Slot on " + datetoshow + " " + $scope.Interviewdates[0].time + " - Please Confirm";
+                    jQuery("label[for='InterviewAvailabilitytext']").html(lbltext);
+                    $("#InterviewAvailability").show();
+                    $("#InterviewDates").hide();
+                }
+                else {
+                    $("#InterviewAvailability").hide();
+                    $("#InterviewDates").show();
+                }
+                $('#dateTimePickerCtrl').val("");
+            });
+
+    $scope.Submit = function () {
+
+        var dataObj = {
+            employeeID: userid,
+            interviewDate: $scope.Interviewdates[0].date,
+            interviewTime: $scope.Interviewdates[0].time,
+            status: $('input[name=confirm]:checked').val()
+        };
+        $http.post("http://localhost:3113/EmployeeConfirm/", dataObj);
+    }
+
+});
 
 talentAcquisitionApp.controller('RegistrationController', ['$scope', '$http', function ($scope, $http) {
     $("#successMessage").hide();
+    $("#updateMessage").hide();
+    $("#EmpTypeId").hide();
+    $("#update").hide();
+    $("#searchScreen").hide();
+    $("#panelScreen").hide();
+    $("#interviewScreen").hide();
+    $("#logoutScreen").hide();
+    $("#employeeConfScreen").hide();
+    $("#UserName").hide();
+
+
+    var email = location.hash.split('=')[1];
+    if (email == undefined || email == "") {
+
+    }
+    else {
+        $http.get("http://localhost:3113/getUserDetails/",
+            { params: { "emailid": email } })
+          .success(function (response) {
+              if (response.length == 1) {
+                  email = "";
+                  $scope.candidate = response[0];
+                  $("#register").hide();
+                  $("#update").show();
+                  $('#EmpTypeId').show();
+                  $('#email').prop('disabled', true);
+              }
+          }).error(function (req) {
+              alert(req);
+          });
+    }
+
+    $scope.updateCandidate = function () {
+        registrationDetails = $scope.candidate;
+        $http({
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            url: 'http://localhost:3113/updateCandidate/',
+            data: registrationDetails,
+            params: { 'emailid': registrationDetails.email }
+        }).success(function () {
+            $scope.candidate = {};
+            $("#register").hide();
+            $("#updateMessage").show();
+            $scope.regForm.$setPristine();
+        }).error(function (error) {
+            alert('An error occurred during registration process: ' + error);
+        });
+    };
+
+
     $scope.Save = function () {
         var registrationDetails = $scope.candidate;
         $http({
@@ -42,7 +230,6 @@ talentAcquisitionApp.controller('RegistrationController', ['$scope', '$http', fu
             url: 'http://localhost:3113/registerCandidate/',
             data: registrationDetails
         }).success(function () {
-            debugger;
             $scope.candidate = {};
             $("#successMessage").show();
             $scope.regForm.$setPristine();
@@ -50,9 +237,22 @@ talentAcquisitionApp.controller('RegistrationController', ['$scope', '$http', fu
             alert('An error occurred during registration process: ' + error);
         });
     };
+
+    checkEmployee = function () {
+        $http.get("http://localhost:3113/getUserDetails/", { params: { "emailid": $scope.candidate.email } })
+            .success(function (response) {
+                if (response.length == 1) {
+                    alert("EmailID  already exists");
+                    $("#email").val("");
+                }
+            });
+    };
+
 }]);
 
 talentAcquisitionApp.controller('SearchController', function ($scope, $http) {
+    $("#ContainerForm").show();
+    $("#footer").show();
     $(document).ready(
          function () {
              $("#startdate,#enddate ,#doj").datepicker({
@@ -62,8 +262,9 @@ talentAcquisitionApp.controller('SearchController', function ($scope, $http) {
          }
     );
 
-    $scope.fromDate = '01/01/2016';
-    $scope.toDate = '01/01/2016';
+    $scope.fromDate = moment(new Date()).add(-1, 'days').format("MM/DD/YYYY")
+    $scope.toDate = moment(new Date()).add(1, 'days').format("MM/DD/YYYY")
+
     $scope.click = function () {
         if ($scope.fromDate == null) {
             alert("Please enter from date");
@@ -73,17 +274,38 @@ talentAcquisitionApp.controller('SearchController', function ($scope, $http) {
             alert("Please enter to date");
             return;
         }
+        var fromDate = $("#startdate").val();
+        var toDate = $("#enddate").val();
+
         if ($scope.expyears == undefined || $scope.expyears == "") {
             $scope.expyears = 0
         }
         if ($scope.expmonths == undefined || $scope.expmonths == "") {
             $scope.expmonths = 0
         }
+        // logic to validate the dates selection
+        var startDate = $("#startdate").val();
+        var endDate = $("#enddate").val();
+        if (startDate != "" && endDate != "") {
+            var fromValue = moment(startDate, "M/D/YYYY H:mm").valueOf()
+            var toValue = moment(endDate, "M/D/YYYY H:mm").valueOf()
+            if (fromValue > toValue) {
+                alert("End date should be greater than or equals to startdate");
+                $scope.result = null;
+                return;
+            }
+        }
+
+
 
         var exp = parseInt($scope.expyears) + (parseInt($scope.expmonths) * 0.1);
-        $http.get("http://localhost:3113/search/", { params: { "name": $scope.EmpName, "skillset": encodeURI($scope.skils), "qualification": $scope.Qualification, "telephone": $scope.Telephone, "ratingininterview": $scope.Rating, "doj": $scope.DOJ, "currentlyworking": $scope.Currentlyworking, "exp": exp } })
+        $http.get("http://localhost:3113/search/", { params: { "name": $scope.EmpName, "skillset": encodeURI($scope.skils), "qualification": $scope.Qualification, "fromdate": $scope.fromDate, "todate": $scope.toDate, "telephone": $scope.Telephone, "ratingininterview": $scope.Rating, "doj": $scope.DOJ, "currentlyworking": $scope.Currentlyworking, "exp": exp } })
        .success(function (response) {
-           $scope.result = response;           
+           if (response.length > 0) {
+               $scope.result = response;
+           } else {
+               $scope.result = null;
+           }
        }).error(function (error) {
            alert(error);
        });
@@ -101,130 +323,147 @@ talentAcquisitionApp.controller('SearchController', function ($scope, $http) {
     }
 });
 
-talentAcquisitionApp.controller('PanelSelectionController', function ($scope, $http) {
-    
+talentAcquisitionApp.controller('PanelSelectionController', function ($scope, $http, $filter) {
+
+    $("#ContainerForm").show();
+    $("#footer").show();
     $(function () {
         $('#dateTimePickerCtrl').datetimepicker();
     });
 
-    $scope.people = [
-        {firstName: "Daryl", surname: "Rowland", twitter: "@darylrowland", pic: "img/daryl.jpeg"},
-        {firstName: "Alan", surname: "Partridge", twitter: "@alangpartridge", pic: "img/alanp.jpg"},
-        {firstName: "Annie", surname: "Rowland", twitter: "@anklesannie", pic: "img/annie.jpg"}
-    ];
-
     $scope.selectedEmployees = [];
     $scope.selectedEmployeesId;
 
-    $scope.sendEmail = function(msg) {
-        if($('#dateTimePickerCtrl').val()==null || $('#dateTimePickerCtrl').val()=="")
-        {                  
+    $scope.sendEmail = function (msg) {
+        if ($('#dateTimePickerCtrl').val() == null || $('#dateTimePickerCtrl').val() == "") {
             jQuery("label[for='lbldateTimePickerCtrlError']").html("This field is required");
             return false;
-        }      
+        }
+
+        if ($("#candidateId_value").val() == "") {
+            jQuery("label[for='lblSelectCandidateError']").html("Select candidate name");
+            return false;
+        }
+
         var emailTo = "";
-        $scope.selectedEmployees.forEach(function(element) {
-            emailTo += element.EmailID + ";";
+        var interviewerDetails = [];
+        $scope.selectedEmployees.forEach(function (element) {
+            emailTo += element.email + ";";
+            interviewerDetails.push({
+                id: element.id, name: element.fullName, date: $filter('date')(new Date($('#dateTimePickerCtrl').val()), 'ddMMyyyy'),
+                time: $filter('date')(new Date($('#dateTimePickerCtrl').val()), 'HH:mm')
+            });
         }, this);
-        if(emailTo=="")
-        {
+        if (emailTo == "") {
             jQuery("label[for='lblSelectPanelError']").html("Select employee to add");
             return false;
         }
+
+        var dataObj = {
+            candidateID: $scope.selectedCandidate.originalObject.id,
+            interviewerDetails: interviewerDetails
+        };
+        $http.post('http://localhost:3113/panelsubmit', dataObj);
+
         if (emailTo) {
 
-            var confirmURL = "http://localhost:41609/EmployeeConfirmation.html?date=" + $('#dateTimePickerCtrl').val();
-            var emailBody = "Hi,<br/><p> You have been Selected for the Interview Slot.<br/>Please Confirm by Clicking below URL.<br/><a href=\"" + confirmURL +"\">Confirm</a><p><br/>Thanks & Regards,<br/>Admin."
-            var req = {from : "Addmin@wipro.com",to : emailTo,subject : "TA - Employee booked for Interview Slot - " + $('#dateTimePickerCtrl').val(),text:emailBody};
-            $http.post('http://localhost:3113/sendemail', req,
-                 {headers: { 'Content-Type': 'application/json'}})                 
+            var startDate = new Date($('#dateTimePickerCtrl').val());
+            var endDate = new Date(startDate);
+            endDate.setHours(startDate.getHours() + 1);
+
+            var confirmURL = "http://localhost:11172/EmployeeConfirmation.html?date=" + $('#dateTimePickerCtrl').val();
+            var emailBody = "Hi,<br/><p> You have been Selected for the Interview Slot.<br/>Please Confirm by Clicking below URL.<br/><a href=\"" + confirmURL + "\">Confirm</a><p><br/>Thanks & Regards,<br/>Admin."
+            var req = { from: "hrteam@wipro.com", to: emailTo, subject: "TA - Employee booked for Interview Slot - " + $('#dateTimePickerCtrl').val(), text: emailBody, startDate: startDate, endDate: endDate };
+            $http.post('http://localhost:3113/SendEmail', req,
+                 { headers: { 'Content-Type': 'application/json' } })
         }
-        location.reload();  
+        //location.reload();
     };
-        
-    $scope.selectEmployee = function(msg) {
-           
-        if($scope.selectedEmployee==undefined )
-        {                  
-            jQuery("label[for='lblSelectPanelError']").html("Select employee to add");                
+
+    $scope.selectEmployee = function (msg) {
+        if ($scope.selectedEmployee == undefined) {
+            jQuery("label[for='lblSelectPanelError']").html("Select employee to add");
             return false;
         }
-        else
-        {
+        else {
             jQuery("label[for='lblSelectPanelError']").html("");
             jQuery("label[for='lblRemovePanelError']").html("");
         }
-        if(!employeeSelected($scope.selectedEmployee.originalObject)){
+        if (!employeeSelected($scope.selectedEmployee.originalObject)) {
             $scope.selectedEmployee.originalObject.timeSlot = $('#dateTimePickerCtrl').val()
             $scope.selectedEmployees.push($scope.selectedEmployee.originalObject);
             displaySelectedEmployee($scope.selectedEmployee.originalObject);
-                
+
         }
         $("#ex1_value").val("");
-        $scope.selectedEmployee=undefined;
+        $scope.selectedEmployee = undefined;
     };
-        
-         
-    $scope.deleteEmployee = function(msg){
-             
-        if($('#employeeSelected option:selected').length == 0){
+
+    $scope.deleteEmployee = function (msg) {
+
+        if ($('#employeeSelected option:selected').length == 0) {
             jQuery("label[for='lblRemovePanelError']").html("Select employee(s) to remove");
             return false;
         }
-        else
-        {
+        else {
             jQuery("label[for='lblRemovePanelError']").html("");
-        }    
-        $('#employeeSelected option:selected').each( function() {
-                      
+        }
+        $('#employeeSelected option:selected').each(function () {
+
             var delEmployee = $(this).text();
             var tempArray = [];
-            tempArray = $.grep($scope.selectedEmployees, function(a){
+            tempArray = $.grep($scope.selectedEmployees, function (a) {
                 return (a.name !== delEmployee)
             });
             $scope.selectedEmployees = tempArray;
             $(this).remove();
         });
     }
-        
-    $scope.ClearDateTimePickerError=function(msg){
+
+    $scope.ClearDateTimePickerError = function (msg) {
         jQuery("label[for='lbldateTimePickerCtrlError']").html("");
     }
-        
-    var employeeSelected = function(obj){
+
+    var employeeSelected = function (obj) {
         var result = false;
-        $scope.selectedEmployees.forEach(function(element) {
-            if(obj.name === element.name){
+        $scope.selectedEmployees.forEach(function (element) {
+            if (obj.fullName === element.name) {
                 result = true;
             }
         }, this);
         return result;
     }
-        
-    var displaySelectedEmployee = function(obj){
+
+    var displaySelectedEmployee = function (obj) {
         var elem = document.getElementById("employeeSelected");
         var option = document.createElement("option");
-        option.text = obj.name;
+        option.text = obj.fullName;
         elem.add(option);
     }
-        
-    $http.get("http://localhost:3113/ShowEmployees").then(function (response) {
+
+    $http.get("http://localhost:3113/ShowEmployees/").then(function (response) {
         $scope.empData = response.data;
         $('#dateTimePickerCtrl').val("");
-    });   
+    });
+
+    $http.get("http://localhost:3113/getcandidates/").then(function (response) {
+        $scope.candidateData = response.data;
+        $('#dateTimePickerCtrl1').val("");
+    });
 });
 
 talentAcquisitionApp.controller('InterviewSchedulerController', function ($scope, $http, $filter) {
-
+    $("#ContainerForm").show();
+    $("#footer").show();
     $(function () {
         $('#dateTimePickerCtrl1').datetimepicker();
     });
 
     $scope.getCandidateUrl = 'http://localhost:3113/getcandidates/';
     $scope.submitUrl = 'http://localhost:3113/schedulersubmit/';
-    $scope.sendEmailUrl = 'http://localhost:3113/SendEmail';
+    $scope.sendEmailUrl = 'http://localhost:3113/Sendmail/';
     $scope.hrEmailID = 'hrteam@wipro.com';
-    
+
     $scope.ClearDateTimePickerError = function (msg) {
         jQuery("label[for='lbldateTimePickerCtrlError1']").html("");
     }
@@ -252,42 +491,49 @@ talentAcquisitionApp.controller('InterviewSchedulerController', function ($scope
         //    jQuery("label[for='lbldateTimePickerCtrlError3']").html("This field should not be same");
         //    return false;
         //}
+
+        if ($("#candidateId_value").val() == "") {
+            jQuery("label[for='lblSelectCandidateError']").html("Select candidate name");
+            return false;
+        }
+
         var dataObj = {
             candidateID: $scope.selectedCandidate.originalObject.id,
-            candidateName: $("#ex1_value").val(),
-            emailID: $scope.selectedCandidate.originalObject.EmailID,
-            date1: $('#dateTimePickerCtrl1').val()//$filter('date')($('#dateTimePickerCtrl1').val(), 'ddMMyyyy'),
-            //date2: $('#dateTimePickerCtrl2').val(),//$filter('date')(scheduler.date2, 'ddMMyyyy'),
-            //date3: $('#dateTimePickerCtrl3').val() //$filter('date')(scheduler.date3, 'ddMMyyyy'),
+            candidateName: $("#candidateId_value").val(),
+            emailID: $scope.selectedCandidate.originalObject.email,
+            testDate: $('#dateTimePickerCtrl1').val(),
+            formatDate: $filter('date')(new Date($('#dateTimePickerCtrl1').val()), 'ddMMyyyy'),
+            formatTime: $filter('date')(new Date($('#dateTimePickerCtrl1').val()), 'HH:mm'),
+            testOrInterview: scheduler.test
         };
         $http.post($scope.submitUrl, dataObj);
-        $scope.SendHttpPostData(dataObj, scheduler.test);
+        $scope.SendHttpPostData(dataObj);
     }
 
-    $scope.SendHttpPostData = function (dataObj, test) {
+    $scope.SendHttpPostData = function (dataObj) {
 
         var mailBody = 'Hello ' + dataObj.candidateName + ',<br/>';
         var mailSubject = "";
-        if (test == "Test") {
+        if (dataObj.testOrInterview == "Test") {
 
             mailSubject = 'Aptitude Test Date for candidate: ' + dataObj.candidateName
-            if (dataObj.date1 != "") {
+            if (dataObj.testDate != "") {
 
-                mailBody += '<p> You have a Aptitude test on: ' + dataObj.date1 + '.<br/> Please click on the link .<br/> http://172.25.174.51/#/home?cid=' + dataObj.candidateID + '&testdt=' + dataObj.date1
+                mailBody += '<p> You have a Aptitude test on: ' + dataObj.testDate + '.<br/> Please click on the link .<br/> http://localhost:11172/#/aptitudetest?cid=' + dataObj.candidateID + '&testdt=' + dataObj.formatDate + '&testtm=' + dataObj.formatTime
             }
             //if (dataObj.date2 != "") {
-            //    mailBody += '<p> You have a Aptitude test on: ' + dataObj.date2 + '.<br/> Please click on the link .<br/> http://172.25.174.68/#/home?cid=' + dataObj.candidateID + '&testdt=' + dataObj.date2
+            //    mailBody += '<p> You have a Aptitude test on: ' + dataObj.date2 + '.<br/> Please click on the link .<br/> http://localhost:41609/#/home?cid=' + dataObj.candidateID + '&testdt=' + dataObj.date2
             //}
             //if (dataObj.date3 != "") {
-            //    mailBody += '<p> You have a Aptitude test on: ' + dataObj.date3 + '.<br/> Please click on the link .<br/> http://172.25.174.68/#/home?cid=' + dataObj.candidateID + '&testdt=' + dataObj.date3
+            //    mailBody += '<p> You have a Aptitude test on: ' + dataObj.date3 + '.<br/> Please click on the link .<br/> http://localhost:41609/#/home?cid=' + dataObj.candidateID + '&testdt=' + dataObj.date3
             //}
 
         }
         else {
             mailSubject = 'Technical Interview Date for candidate: ' + dataObj.candidateName
 
-            if (dataObj.date1 != "") {
-                mailBody += '<p> You have a Technical Interview on: ' + dataObj.date1 + '.'
+            if (dataObj.testDate != "") {
+                mailBody += '<p> You have a Technical Interview on: ' + dataObj.testDate + '.'
             }
             //if (dataObj.date2 != "") {
             //    mailBody += '<p> You have a Technical Interview on: ' + dataObj.date2 + '.'
@@ -307,10 +553,12 @@ talentAcquisitionApp.controller('InterviewSchedulerController', function ($scope
         $http.post($scope.sendEmailUrl, req,
             { headers: { 'Content-Type': 'application/json' } })
             .success(function (response) {
-                alert("failure message: " + response);
+                alert("mail send successfully");
+                $('#dateTimePickerCtrl1').val("");
+                $("#candidateId_value").val("");
             })
 
-        location.reload();
+        //location.reload();
     }
 });
 
@@ -326,8 +574,9 @@ talentAcquisitionApp.service('helperservice', function () {
     };
 });
 
-talentAcquisitionApp.controller('AptitudeTestController',['$scope', '$location','$http','helperservice', function ($scope, $location, $http, helper) {
-
+talentAcquisitionApp.controller('AptitudeTestController', ['$scope', '$location', '$http', 'helperservice', function ($scope, $location, $http, helper) {  
+    $("#ContainerForm").show();
+    $("#footer").show();
     $scope.questionUrl = 'http://localhost:3113/aptitudetest/';
     $scope.testSubmitUrl = 'http://localhost:3113/aptitudetestsubmit/';
     $scope.sendEmailUrl = 'http://localhost:3113/sendemail';

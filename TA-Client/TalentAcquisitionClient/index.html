@@ -5,7 +5,7 @@
     <title>Talent Acquisition</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <link rel="stylesheet" href="https://bootswatch.com/cerulean/bootstrap.min.css" media="screen"/>
+    <link rel="stylesheet" href="https://bootswatch.com/cerulean/bootstrap.min.css" media="screen" />
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular.js"></script>
@@ -19,19 +19,22 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular-animate.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular-touch.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js"></script>
+
+
     <script src="scripts/lib/ui-bootstrap-tpls-0.14.3.min.js"></script>
     <script src="scripts/lib/datetimepicker.js"></script>
     <link href="css/angucomplete.css" rel="stylesheet" />
-    <link href="css/datetimepicker.css" type="text/css"  rel="stylesheet" />
+    <link href="css/datetimepicker.css" type="text/css" rel="stylesheet" />
     <script src="scripts/lib/angucomplete.js"></script>
-   
+
     <link rel="stylesheet" type="text/css" href="fonts/bariol/bariol.css" />
     <link rel="stylesheet" type="text/css" href="css/structure.css" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" />
-    <link href="css/prettify.css" type="text/css"  rel="stylesheet" />
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">-->
+    <link href="css/prettify.css" type="text/css" rel="stylesheet" />
 
     <script src="scripts/app/app.js"></script>
-    <title>Talent Acquisition</title>
+
 </head>
 <body ng-app="talentAcquisitionApp">
     <div class="navbar navbar-default navbar-fixed-top">
@@ -46,18 +49,24 @@
             </div>
             <div class="navbar-collapse collapse" id="navbar-main">
                 <ul class="nav navbar-nav">
-                    <li><a href="#registration"> Registration </a></li>
-                    <li><a href="#search"> Search </a></li>
-                    <li><a href="#panelselection"> Panel Selection </a></li>
-                    <li><a href="#interviewscheduler"> Interview Scheduler </a></li>
+                    <li id="regScreen"><a href="#registration"> Registration </a></li>
+                    <li id="searchScreen"><a href="#search"> Search </a></li>
+                    <li id="panelScreen"><a href="#panelselection"> Panel Selection </a></li>
+                    <li id="interviewScreen"><a href="#interviewscheduler"> Interview Scheduler </a></li>
+                    <li id="employeeConfScreen"><a href="#EmployeeConfirmation"> Employee Confirmation </a></li>
+                    <li id="logoutScreen"><a style="color:red" href="#logout"><b>Sign Out</b></a></li>
                 </ul>
+                <b>
+                    <label id="UserName">Welcome <input type="text" id="user" style="background-color: transparent;border: 0px solid;height: 20px;width: 130px;" ng-model="empName"></label>
+                </b>
             </div>
+
         </div>
     </div>
 
-    <div class="container">
+    <div class="container" id="ContainerForm">
         <div ng-view></div>
-        <footer>
+        <footer id="footer">
             <div class="row">
                 <div class="col-lg-12">
                     © 2015 - Wipro Technologies

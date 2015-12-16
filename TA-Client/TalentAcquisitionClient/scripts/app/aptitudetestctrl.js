@@ -1,13 +1,14 @@
-﻿var testCtrl = function ($scope, $location, $http, helper) {
+﻿var testCtrl = function ($scope, $location, $http, helper, $filter) {
     $scope.questionUrl = 'http://localhost:3113/aptitudetest/';
     $scope.testSubmitUrl = 'http://localhost:3113/aptitudetestsubmit/';
-    $scope.sendEmailUrl = 'http://localhost:3113/sendemail';
+    $scope.sendEmailUrl = 'http://localhost:3113/sendscoreemail';
     $scope.getTestSlotUrl = 'http://localhost:3113/aptitudetestslot';
     $scope.mode = 'instructions';
     $scope.itemsPerPage = 1;
     $scope.candidateID = $location.search()['cid'];
     $scope.isTestDate = true;
     $scope.hrEmailID = 'v-shkad@microsoft.com';
+    $scope.dateTimeFormat = 'ddMMyyyy HH:mm';
 
     var today = new Date();
     var dd = today.getDate();
@@ -22,12 +23,27 @@
             method: "GET",
             params: { "candidateid": $scope.candidateID }
         }).then(function (res) {
-            $scope.testdate = res.data[0].testdate;
-            $scope.testtime = res.data[0].testtime;
-            if (!($scope.testdate == ("0" + dd.toString()).slice(-2) + ("0" + mm.toString()).slice(-2) + yyyy.toString()))
-                $scope.isTestDate = false;
-            else if (!($scope.testtime == ("0" + hrs.toString()).slice(-2) + ':' + ("0" + mins.toString()).slice(-2)))
-                $scope.isTestDate = false;
+            $scope.candidateDetails = {
+                candidateName: res.data[0].fullName,
+                employeeType: res.data[0].employeeType,
+                testDate: res.data[0].testDate,
+                testTime: res.data[0].testTime,
+                emailID: res.data[0].email
+            };
+
+            if ($scope.candidateDetails.employeeType != 'HR') {
+                var testSlot = $scope.candidateDetails.testDate + " " + $scope.candidateDetails.testTime;
+                var currentDate = $filter('date')(new Date(), $scope.dateTimeFormat);
+                var ms = moment(testSlot, $scope.dateTimeFormat).diff(moment(currentDate, $scope.dateTimeFormat));
+                var d = moment.duration(ms);
+                var mins = Math.floor(d.asMinutes());
+                if (mins >= -30 & mins <= 0) {
+                    $scope.isTestDate = true;
+                }
+                else
+                    $scope.isTestDate = false;
+
+            }
         })
     };
     $scope.validateTestSlot();
@@ -51,10 +67,10 @@
     },
 
     $scope.goTo = function (index) {
-         if (index > 0 && index <= $scope.totalItems) {
-             $scope.currentPage = index;
-             $scope.mode = 'quiz';
-         }
+        if (index > 0 && index <= $scope.totalItems) {
+            $scope.currentPage = index;
+            $scope.mode = 'quiz';
+        }
     },
 
     $scope.isAnswered = function (index) {
@@ -79,18 +95,20 @@
 
         $scope.scorePercent = parseInt($scope.score) * 100 / parseInt($scope.questions.length);
         if ($scope.scorePercent >= 50)
-            $scope.isPassed = true;
+            $scope.isPassed = 'Passed';
         else
-            $scope.isPassed = false;
+            $scope.isPassed = 'Failed';
         $scope.scorePercent = $scope.scorePercent + "%";
 
-        var dataObj = {
-            candidateID: $scope.candidateID,
-            score: $scope.scorePercent,
-            isPassed: $scope.isPassed
-        };
-        $http.post($scope.testSubmitUrl, dataObj);
-        $scope.SendHttpPostData($scope.candidateID, $scope.scorePercent);
+        if ($scope.candidateDetails.employeeType != 'HR') {
+            var dataObj = {
+                candidateID: $scope.candidateID,
+                score: $scope.scorePercent,
+                isPassed: $scope.isPassed
+            };
+            $http.post($scope.testSubmitUrl, dataObj);
+            $scope.SendHttpPostData($scope.scorePercent, $scope.isPassed);
+        }
     },
      $scope.isCorrect = function (question) {
          var result = 'correct';
@@ -142,13 +160,21 @@
         }
     }
 
-    $scope.SendHttpPostData = function (candidateID, score) {
+    $scope.SendHttpPostData = function (score, isPassed) {
+
+        var msg = 'Candidate - <b><I>' + $scope.candidateDetails.candidateName + '</b></I> - has completed the test. Below are the details: </br></br>' +
+                    '<table>' +
+                    '<tr><td><b>Candidate Name</b>:</td><td>' + $scope.candidateDetails.candidateName + '</td></tr>' +
+                    '<tr><td><b>Candidate Email</b>:</td><td>' + $scope.candidateDetails.emailID + '</td></tr>' +
+                    '<tr><td><b>Score Acquired</b>:</td><td>' + score + '</td></tr>' +
+                    '<tr><td><b>Pass/Fail Status</b>:</td><td>' + isPassed + '</td></tr>' +
+                    '</table>';
 
         var req = {
-            from: "sl.sravanthi@gmail.com",
+            from: 'wiprocarpool@gmail.com',
             to: $scope.hrEmailID,
-            subject: 'Notification: Aptitude Test Submission for candidate: ' + candidateID,
-            text: 'Candidate with ID ' + candidateID + ' has completed test with score: ' + score
+            subject: 'Notification: Aptitude Test Submission for candidate: ' + $scope.candidateDetails.candidateName,
+            text: msg,
         };
 
         $http.post($scope.sendEmailUrl, req,
@@ -158,5 +184,5 @@
             })
     }
 }
-testCtrl.$inject = ['$scope','$location', '$http', 'helperService'];
+testCtrl.$inject = ['$scope', '$location', '$http', 'helperService', '$filter'];
 testApp.controller('testCtrl', testCtrl);
