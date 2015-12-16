@@ -461,7 +461,7 @@ talentAcquisitionApp.controller('InterviewSchedulerController', function ($scope
 
     $scope.getCandidateUrl = 'http://localhost:3113/getcandidates/';
     $scope.submitUrl = 'http://localhost:3113/schedulersubmit/';
-    $scope.sendEmailUrl = 'http://localhost:3113/Sendmail/';
+    $scope.sendEmailUrl = 'http://localhost:3113/SendEmailFromScheduler/';
     $scope.hrEmailID = 'hrteam@wipro.com';
     
     $scope.ClearDateTimePickerError = function (msg) {
