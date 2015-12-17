@@ -138,6 +138,8 @@ talentAcquisitionApp.controller('LogoutController', function ($scope) {
 talentAcquisitionApp.controller('EmployeeConfirmationController', function ($scope, $http) {
     $("#ContainerForm").show();
     $("#footer").show();
+    $("#InterviewAvailability").hide();
+    $("#InterviewDates").hide();
     var userid = sessionStorage.getItem('userID');
     $http.get("http://localhost:3113/GetEmployeeInterviewDates/",
             { params: { "loginid": userid } }).then(function (response) {
@@ -164,7 +166,36 @@ talentAcquisitionApp.controller('EmployeeConfirmationController', function ($sco
             interviewTime: $scope.Interviewdates[0].time,
             status: $('input[name=confirm]:checked').val()
         };
-        $http.post("http://localhost:3113/EmployeeConfirm/", dataObj);
+
+        var emailFrom = $scope.Interviewdates[0].emailID;
+        var hrEmailID = "wiprocarpool@gmail.com";
+        var emailSubject = "Confirmed";
+        if ($('input[name=confirm]:checked').val() == "N") {
+            emailSubject = "Rejected";
+        }
+        var emailBody = "Hi,<br/><p> " + $scope.Interviewdates[0].name + "has " + emailSubject + " for the Interview Slot."
+        var req = { from: emailFrom, to: hrEmailID, subject: "TA - Employee " + emailSubject + " for Interview Slot - " + $('#dateTimePickerCtrl').val(), text: emailBody };
+
+        //$http.post("http://localhost:3113/EmployeeConfirm/", dataObj,
+        //    { headers: { 'Content-Type': 'application/json' }
+        //    }).success(function (response) {
+        //        $http.post('http://localhost:3113/SendEmailFromScheduler/', req,
+        //     { headers: { 'Content-Type': 'application/json' } });
+        //        alert("Thanks for confirmation");
+        //        $('#dateTimePickerCtrl').val("");
+        //        $("#InterviewAvailability").hide();
+        //        $("#InterviewDates").show();
+        //    }).error(function (error) {
+        //        alert('An error occurred during submit process: ' + error);
+        //    });
+        
+        $http.post('http://localhost:3113/SendEmailFromScheduler/', req,
+             { headers: { 'Content-Type': 'application/json' } });
+
+        alert("Thanks for confirmation");
+        $('#dateTimePickerCtrl').val("");
+        $("#InterviewAvailability").hide();
+        $("#InterviewDates").show();
     }
 
 });
@@ -351,7 +382,7 @@ talentAcquisitionApp.controller('PanelSelectionController', function ($scope, $h
             emailTo += element.email + ";";
             interviewerDetails.push({
                 id: element.id, name: element.fullName, date: $filter('date')(new Date($('#dateTimePickerCtrl').val()), 'ddMMyyyy'),
-                time: $filter('date')(new Date($('#dateTimePickerCtrl').val()), 'HH:mm')
+                time: $filter('date')(new Date($('#dateTimePickerCtrl').val()), 'HH:mm'),confirm:"",emailID:element.email
             });
         }, this);
         if (emailTo == "") {
@@ -371,12 +402,18 @@ talentAcquisitionApp.controller('PanelSelectionController', function ($scope, $h
             var endDate = new Date(startDate);
             endDate.setHours(startDate.getHours() + 1);
 
-            var confirmURL = "http://localhost:11172/EmployeeConfirmation.html?date=" + $('#dateTimePickerCtrl').val();
+            var confirmURL = "http://localhost:11172/index.html#/login"
             var emailBody = "Hi,<br/><p> You have been Selected for the Interview Slot.<br/>Please Confirm by Clicking below URL.<br/><a href=\"" + confirmURL + "\">Confirm</a><p><br/>Thanks & Regards,<br/>Admin."
             var req = { from: "hrteam@wipro.com", to: emailTo, subject: "TA - Employee booked for Interview Slot - " + $('#dateTimePickerCtrl').val(), text: emailBody, startDate: startDate, endDate: endDate };
             $http.post('http://localhost:3113/SendEmail', req,
                  { headers: { 'Content-Type': 'application/json' } })
         }
+
+        $("#ex1_value").val("");
+        $("#candidateId_value").val("");
+        $('#dateTimePickerCtrl').val("");
+        $('#employeeSelected').empty();
+        $('#employeeSelected').append('<option value="" disabled>Select Employee(s) to Remove</option>');
         //location.reload();
     };
         
@@ -506,8 +543,18 @@ talentAcquisitionApp.controller('InterviewSchedulerController', function ($scope
             formatTime: $filter('date')(new Date($('#dateTimePickerCtrl1').val()), 'HH:mm'),
             testOrInterview: scheduler.test
         };
-        $http.post($scope.submitUrl, dataObj);
-        $scope.SendHttpPostData(dataObj);
+
+        $http.post($scope.submitUrl, dataObj,
+            { headers: { 'Content-Type': 'application/json' }
+            }).success(function (response) {
+                $scope.SendHttpPostData(dataObj);
+                alert("submitted successfully");
+                $('#dateTimePickerCtrl1').val("");
+                $("#candidateId_value").val("");
+            }).error(function (error) {
+                alert('An error occurred during submit process: ' + error);
+            });
+        
     }
 
     $scope.SendHttpPostData = function (dataObj) {
@@ -519,7 +566,8 @@ talentAcquisitionApp.controller('InterviewSchedulerController', function ($scope
             mailSubject = 'Aptitude Test Date for candidate: ' + dataObj.candidateName
             if (dataObj.testDate != "") {
 
-                mailBody += '<p> You have a Aptitude test on: ' + dataObj.testDate + '.<br/> Please click on the link .<br/> http://localhost:11172/#/aptitudetest?cid=' + dataObj.candidateID + '&testdt=' + dataObj.formatDate + '&testtm=' + dataObj.formatTime
+                testUrl='http://localhost:11172/#/aptitudetest?cid=' + dataObj.candidateID + '&testdt=' + dataObj.formatDate + '&testtm=' + dataObj.formatTime
+                mailBody += "<p> You have a Aptitude test on: " + dataObj.testDate + ".<br/> Please click on the <a href=\"" + testUrl + "\">AptitudeTest</a>" 
             }
             //if (dataObj.date2 != "") {
             //    mailBody += '<p> You have a Aptitude test on: ' + dataObj.date2 + '.<br/> Please click on the link .<br/> http://localhost:41609/#/home?cid=' + dataObj.candidateID + '&testdt=' + dataObj.date2
@@ -551,14 +599,11 @@ talentAcquisitionApp.controller('InterviewSchedulerController', function ($scope
         };
 
         $http.post($scope.sendEmailUrl, req,
-            { headers: { 'Content-Type': 'application/json' } })
-            .success(function (response) {
-                alert("mail send successfully");
-                $('#dateTimePickerCtrl1').val("");
-                $("#candidateId_value").val("");
-            })
-
-        //location.reload();
+            { headers: { 'Content-Type': 'application/json' }
+            }).success(function (response) {
+            }).error(function (response) {
+                alert("failure mail message: " + response);
+            });
     }
 });
 
