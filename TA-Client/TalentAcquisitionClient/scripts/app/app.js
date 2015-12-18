@@ -84,8 +84,6 @@ talentAcquisitionApp.controller('LoginController', function ($scope, $http) {
 
 });
 
-
-
 talentAcquisitionApp.controller('HomeController', function ($scope) {
     //debugger;
     var empType = [];
@@ -163,6 +161,7 @@ talentAcquisitionApp.controller('LogoutController', function ($scope) {
 });
 
 talentAcquisitionApp.controller('EmployeeConfirmationController', function ($scope, $http) {
+
     $("#ContainerForm").show();
     $("#footer").show();
     $("#InterviewAvailability").hide();
@@ -172,9 +171,52 @@ talentAcquisitionApp.controller('EmployeeConfirmationController', function ($sco
             { params: { "loginid": userid } }).then(function (response) {
                 $scope.Interviewdates = response.data;
                 if ($scope.Interviewdates.length > 0) {
-                    var datetoshow = $scope.Interviewdates[0].date.substring(0, 2) + '/' + $scope.Interviewdates[0].date.substring(2, 4) + '/' + $scope.Interviewdates[0].date.substring(4, 8);
-                    var lbltext = "Are you Available for Interview Slot on " + datetoshow + " " + $scope.Interviewdates[0].time + " - Please Confirm";
-                    jQuery("label[for='InterviewAvailabilitytext']").html(lbltext);
+                    var objDiv = document.getElementById("InterviewAvailabilitytext");
+                    $("#InterviewAvailabilitytext").empty();
+
+                    for (var i = 0 ; i < $scope.Interviewdates.length ; ++i) {
+                        var datetoshow = $scope.Interviewdates[0].date.substring(0, 2) + '/' + $scope.Interviewdates[0].date.substring(2, 4) + '/' + $scope.Interviewdates[0].date.substring(4, 8);
+                        var lbltext = "Are you Available for Interview Slot on " + datetoshow + " " + $scope.Interviewdates[0].time + " - Please Confirm";
+
+                        var newDiv = document.createElement("div");
+                        var objTextNode1 = document.createTextNode("Yes");
+
+                        var newlabel = document.createElement("LABEL");
+                        newlabel.innerHTML = lbltext;
+                        newDiv.appendChild(newlabel);
+
+                        var newRadio = document.createElement("input");
+                        newRadio.type = "radio";
+                        newRadio.id = "radio" + i;
+                        newRadio.value = "Y_" + $scope.Interviewdates[i].date + "_" + $scope.Interviewdates[i].time;
+                        newRadio.name = "radioGrp" + i;
+                        newRadio.defaultChecked = true;
+
+                        var radioItem2 = document.createElement("input");
+                        radioItem2.type = "radio";
+                        radioItem2.name = "radioGrp" + i;
+                        radioItem2.id = "radio2" + i;
+                        radioItem2.value = "N_" + $scope.Interviewdates[i].date + "_" + $scope.Interviewdates[i].time;
+
+                        var objTextNode2 = document.createTextNode("No");
+                        var objLabel2 = document.createElement("label");
+                        objLabel2.htmlFor = radioItem2.id;
+                        objLabel2.appendChild(radioItem2);
+                        objLabel2.appendChild(objTextNode2);
+
+                        var objLabel = document.createElement("label");
+                        objLabel.htmlFor = newRadio.id;
+                        objLabel.appendChild(newRadio);
+                        objLabel.appendChild(objTextNode1);
+
+                        newDiv.appendChild(objLabel);
+                        newDiv.appendChild(objLabel2);
+                        objDiv.appendChild(newDiv);
+
+                    }
+                    //var datetoshow = $scope.Interviewdates[0].date.substring(0, 2) + '/' + $scope.Interviewdates[0].date.substring(2, 4) + '/' + $scope.Interviewdates[0].date.substring(4, 8);
+                    //var lbltext = "Are you Available for Interview Slot on " + datetoshow + " " + $scope.Interviewdates[0].time + " - Please Confirm";
+                    //jQuery("label[for='InterviewAvailabilitytext']").html(lbltext);
                     $("#InterviewAvailability").show();
                     $("#InterviewDates").hide();
                 }
@@ -185,44 +227,55 @@ talentAcquisitionApp.controller('EmployeeConfirmationController', function ($sco
                 $('#dateTimePickerCtrl').val("");
             });
 
-    $scope.Submit = function () {
+    $scope.Submit = function (thisform) {
+        var radioResults = 'Radio buttons: ';
+        var radiobuttons = $('#InterviewAvailabilitytext').find('input:checked');
+        //var elements = divid.elements;
+        for (var i = 0; i < radiobuttons.length; i++) {
 
-        var dataObj = {
-            employeeID: userid,
-            interviewDate: $scope.Interviewdates[0].date,
-            interviewTime: $scope.Interviewdates[0].time,
-            status: $('input[name=confirm]:checked').val()
-        };
-
-        var emailFrom = $scope.Interviewdates[0].emailID;
-        var hrEmailID = "wiprocarpool@gmail.com";
-        var emailSubject = "Confirmed";
-        if ($('input[name=confirm]:checked').val() == "N") {
-            emailSubject = "Rejected";
+            if (radiobuttons[i].type == 'radio') {
+                if (radiobuttons[i].checked == true) {
+                    radioResults += radiobuttons[i].value + ',';
+                }
+            }
         }
-        var emailBody = "Hi,<br/><p> " + $scope.Interviewdates[0].name + "has " + emailSubject + " for the Interview Slot."
-        var req = { from: emailFrom, to: hrEmailID, subject: "TA - Employee " + emailSubject + " for Interview Slot - " + $('#dateTimePickerCtrl').val(), text: emailBody };
+        var selectedvalues = radioResults;
+        var splitselectedvalue = selectedvalues.slice(0, selectedvalues.length - 1).split(',');
 
-        //$http.post("http://localhost:3113/EmployeeConfirm/", dataObj,
-        //    { headers: { 'Content-Type': 'application/json' }
-        //    }).success(function (response) {
-        //        $http.post('http://localhost:3113/SendEmailFromScheduler/', req,
-        //     { headers: { 'Content-Type': 'application/json' } });
-        //        alert("Thanks for confirmation");
-        //        $('#dateTimePickerCtrl').val("");
-        //        $("#InterviewAvailability").hide();
-        //        $("#InterviewDates").show();
-        //    }).error(function (error) {
-        //        alert('An error occurred during submit process: ' + error);
-        //    });
-        
-        $http.post('http://localhost:3113/SendEmailFromScheduler/', req,
-             { headers: { 'Content-Type': 'application/json' } });
+        for (var i = 0; i < splitselectedvalue.length; i++) {
 
-        alert("Thanks for confirmation");
-        $('#dateTimePickerCtrl').val("");
-        $("#InterviewAvailability").hide();
-        $("#InterviewDates").show();
+            var selectedValue = splitselectedvalue[0].split('_');
+
+            var dataObj = {
+                employeeID: userid,
+                interviewDate: selectedValue[1], //$scope.Interviewdates[0].date,
+                interviewTime: selectedValue[2], //$scope.Interviewdates[0].time,
+                status: selectedValue[0].charAt(selectedValue[0].length - 1)//$('input[name=confirm]:checked').val()
+            };
+
+            var emailFrom = $scope.Interviewdates[0].emailID;
+            var hrEmailID = "wiprocarpool@gmail.com";
+            var emailSubject = "Confirmed";
+            if ($('input[name=confirm]:checked').val() == "N") {
+                emailSubject = "Rejected";
+            }
+            var emailBody = "Hi,<br/><p> " + $scope.Interviewdates[0].name + "has " + emailSubject + " for the Interview Slot."
+            var req = { from: emailFrom, to: hrEmailID, subject: "TA - Employee " + emailSubject + " for Interview Slot - " + $('#dateTimePickerCtrl').val(), text: emailBody };
+
+            $http.post("http://localhost:3113/EmployeeConfirm/", dataObj,
+                {
+                    headers: { 'Content-Type': 'application/json' }
+                }).success(function (response) {
+                    $http.post('http://localhost:3113/SendEmailFromScheduler/', req,
+                 { headers: { 'Content-Type': 'application/json' } });
+                    alert("Thanks for confirmation");
+                    $('#dateTimePickerCtrl').val("");
+                    $("#InterviewAvailability").hide();
+                    $("#InterviewDates").show();
+                }).error(function (error) {
+                    alert('An error occurred during submit process: ' + error);
+                });
+        }
     }
 
 });
@@ -308,7 +361,6 @@ talentAcquisitionApp.controller('RegistrationController', ['$scope', '$http', fu
 
 }]);
 
-
 talentAcquisitionApp.controller('SearchController', function ($scope, $http) {
     $("#ContainerForm").show();
     $("#footer").show();
@@ -384,8 +436,6 @@ talentAcquisitionApp.controller('SearchController', function ($scope, $http) {
 
     }
 });
-
-
 
 talentAcquisitionApp.controller('PanelSelectionController', function ($scope, $http, $filter) {
     

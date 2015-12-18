@@ -1,21 +1,18 @@
 <div ng-controller="EmployeeConfirmationController" class="container">
-    <div class="row well" >
-        <div id="InterviewAvailability">
-            <div>
-                <b><label for="InterviewAvailabilitytext"></label></b>
-                <span><b></b></span>
+    <div class="row well">
+        <form name="thisForm" id="thisForm">
+            <div id="InterviewAvailability">
+                <div id="InterviewAvailabilitytext">
+                </div>
+
+                <div>
+                    <input type="button" value="submit" ng-click="Submit(thisForm)">
+                </div>
             </div>
-            <div>
-                <input type="radio" name="confirm" value="Y" checked>Yes
-                <br>
-                <input type="radio" name="confirm" value="N">No
-                <br><br>
-                <input type="button" value="submit" ng-click="Submit()">
-            </div>
-        </div>
+        </form>
         <div class="row well" id="InterviewDates">
             <div>
-                <span><b>No interview(s) are schedules to you</b></span>
+                <span><b>No interview(s) are scheduled to you</b></span>
             </div>
         </div>
     </div>
