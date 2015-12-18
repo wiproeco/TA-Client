@@ -39,6 +39,10 @@ talentAcquisitionApp.config(['$routeProvider',
             templateUrl: 'views/aptitudetest.html',
             controller: 'AptitudeTestController'
         }).
+        when('/technicalfeedback', {
+            templateUrl: 'views/technicalfeedback.html',
+            controller: 'TechnicalFeedbackController'
+        }).
          when('/logout', {
              templateUrl: 'views/logout.html',
              controller: 'LogoutController'
@@ -92,6 +96,7 @@ talentAcquisitionApp.controller('HomeController', function ($scope) {
         $("#logoutScreen").show();
         $("#UserName").show();
         $("#interviewScreen").hide();
+        $("#technicalfeedback").hide();
         $("#employeeConfScreen").hide();
         $("#footer").hide();
     }
@@ -113,6 +118,7 @@ talentAcquisitionApp.controller('HomeController', function ($scope) {
         $("#searchScreen").hide();
         $("#panelScreen").hide();
         $("#interviewScreen").hide();
+        $("#technicalfeedback").show();
         $("#employeeConfScreen").show();
         $("#logoutScreen").show();
         $("#UserName").show();
@@ -750,3 +756,46 @@ talentAcquisitionApp.controller('AptitudeTestController', ['$scope', '$location'
             })
     }
 }]);
+
+talentAcquisitionApp.controller('TechnicalFeedbackController', function ($scope, $http, $filter) {
+
+    $("#ContainerForm").show();
+    $("#footer").show();
+    $scope.getCandidatesUrl = 'http://localhost:3113/getcandidates/';
+    $scope.submittechnicalfeedbackUrl = 'http://localhost:3113/submittechnicalfeedback/';
+
+    $(function () {
+        $('#remarks').val("");
+    });
+
+    $scope.submitFeedback = function () {
+
+        if ($("#candidateId_value").val() == "") {
+            jQuery("label[for='lblSelectCandidateError']").html("Select candidate name");
+            return false;
+        }
+
+        if ($scope.ratings == undefined)
+            return false;
+
+        var req = {
+            candidateID: $scope.selectedCandidate.originalObject.id,
+            technicalRating: encodeURI($scope.ratings),
+            remarks: $scope.remarks,
+        };
+
+        $http.post($scope.submittechnicalfeedbackUrl, req)
+        .success(function (response) {
+            alert("Technical interview feedback submitted successfully.");
+            $("#candidateId_value").val("");
+            $scope.ratings = '';
+            $scope.remarks = '';
+        }).error(function (error) {
+            alert('An error occurred during submit process: ' + error);
+        });
+    };
+
+    $http.get($scope.getCandidatesUrl).then(function (response) {
+        $scope.candidateData = response.data;
+    });
+});

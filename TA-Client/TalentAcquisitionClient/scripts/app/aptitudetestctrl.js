@@ -98,15 +98,16 @@
             $scope.isPassed = 'Passed';
         else
             $scope.isPassed = 'Failed';
+        $scope.scorePercent_Int = $scope.scorePercent;
         $scope.scorePercent = $scope.scorePercent + "%";
 
         if ($scope.candidateDetails.employeeType != 'HR') {
-        var dataObj = {
-            candidateID: $scope.candidateID,
-            score: $scope.scorePercent,
-            isPassed: $scope.isPassed
-        };
-        $http.post($scope.testSubmitUrl, dataObj);
+            var dataObj = {
+                candidateID: $scope.candidateID,
+                score: $scope.scorePercent_Int,
+                isPassed: $scope.isPassed
+            };
+            $http.post($scope.testSubmitUrl, dataObj);
             $scope.SendHttpPostData($scope.scorePercent, $scope.isPassed);
         }
     },

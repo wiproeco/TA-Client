@@ -1,0 +1,47 @@
+﻿<div class="container" ng-controller="TechnicalFeedbackController">
+    <div class="row well">
+        <div class="page-header">
+            <h1>Technical Interview Feedback</h1>
+        </div>
+        <div>
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label for="SelectCandidate" class="control-label col-xs-2">Select Candidate</label>
+                    <div class="col-xs-5">
+                        <angucomplete id="candidateId" placeholder="Search Candidate" pause="100" selectedobject="selectedCandidate" localdata="candidateData"
+                                      searchfields="fullName" titlefield="fullName" minlength="1" inputclass="form-control form-control-small"
+                                      matchclass="highlight" />
+                    </div>
+                    <div class="form-group col-sm-3">
+                        <label for='lblSelectCandidateError' class="label label-danger"></label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="SelectRating" class="control-label col-xs-2">Select Rating</label>
+                    <div class="col-xs-5">
+                        <select class="form-control" ng-model="ratings">
+                            <option value="Excellent">Excellent</option>
+                            <option value="Average">Average</option>
+                            <option value="Good">Good</option>
+                            <option value="Poor">Poor</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-sm-3">
+                        <label for='lblSelectRatingError' class="label label-danger"></label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="remarks" class="col-sm-2 control-label">Remarks:</label>
+                    <div class="col-sm-6">
+                        <input type="text" name="remarks" id="remarks" class="form-control" placeholder="Remarks" ng-model="remarks" ng-maxlength="1000">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-offset-2 col-xs-10">
+                        <button type="submit" class="btn btn-primary" data-ng-click="submitFeedback()">Submit Feedback</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div><!-- end for class "row" -->
+</div><!-- end for class "container" -->
