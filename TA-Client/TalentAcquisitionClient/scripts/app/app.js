@@ -58,6 +58,7 @@ talentAcquisitionApp.controller('LoginController', function ($scope, $http) {
     $("#searchScreen").hide();
     $("#panelScreen").hide();
     $("#interviewScreen").hide();
+    $("#technicalFbkScreen").hide();
     $("#employeeConfScreen").hide();
     $("#logoutScreen").hide();
     $("#UserName").hide();
@@ -68,6 +69,10 @@ talentAcquisitionApp.controller('LoginController', function ($scope, $http) {
                //alert("Hi");
                appData = response;
                location.href = '#Home';
+               sessionStorage.setItem('empName', appData[0].fullName);
+               sessionStorage.setItem('empType', appData[0].employeeType);
+               sessionStorage.setItem('userID', appData[0].id);
+
            }
            else {
                alert("Invalid user, please enter correct username and password");
@@ -112,7 +117,7 @@ talentAcquisitionApp.controller('HomeController', function ($scope) {
         $("#UserName").show();
         $("#interviewScreen").hide();
         $("#employeeConfScreen").hide();
-        $("#technicalfeedback").hide();
+        $("#technicalFbkScreen").hide();
         $("#footer").hide();
     }
     else if (empType == "HR") {
@@ -124,7 +129,7 @@ talentAcquisitionApp.controller('HomeController', function ($scope) {
         $("#logoutScreen").show();
         $("#UserName").show();
         $("#employeeConfScreen").hide();
-        $("#technicalfeedback").hide();
+        $("#technicalFbkScreen").hide();
         $("#footer").hide();
     }
 
@@ -136,7 +141,7 @@ talentAcquisitionApp.controller('HomeController', function ($scope) {
         $("#interviewScreen").hide();
         $("#employeeConfScreen").show();
         $("#logoutScreen").show();
-        $("#technicalfeedback").show();
+        $("#technicalFbkScreen").show();
         $("#UserName").show();
         $("#footer").hide();
 
