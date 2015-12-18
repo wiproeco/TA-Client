@@ -48,13 +48,13 @@ talentAcquisitionApp.config(['$routeProvider',
              controller: 'LogoutController'
          }).
         otherwise({
-             redirectTo: '/login'
+            redirectTo: '/login'
         });
   }]);
 
 talentAcquisitionApp.controller('LoginController', function ($scope, $http) {
     //debugger;
-    $("#regScreen").hide();   
+    $("#regScreen").hide();
     $("#searchScreen").hide();
     $("#panelScreen").hide();
     $("#interviewScreen").hide();
@@ -259,8 +259,10 @@ talentAcquisitionApp.controller('EmployeeConfirmationController', function ($sco
             if ($('input[name=confirm]:checked').val() == "N") {
                 emailSubject = "Rejected";
             }
+            var datetoshow = selectedValue[1].substring(0, 2) + '/' + selectedValue[1].substring(2, 4) + '/' + selectedValue[1].substring(4, 8);
+            var emaildate = datetoshow + " " + selectedValue[2];
             var emailBody = "Hi,<br/><p> " + $scope.Interviewdates[0].name + "has " + emailSubject + " for the Interview Slot."
-            var req = { from: emailFrom, to: hrEmailID, subject: "TA - Employee " + emailSubject + " for Interview Slot - " + $('#dateTimePickerCtrl').val(), text: emailBody };
+            var req = { from: emailFrom, to: hrEmailID, subject: "TA - Employee " + emailSubject + " for Interview Slot - " + emaildate, text: emailBody };
 
             $http.post("http://localhost:3113/EmployeeConfirm/", dataObj,
                 {
@@ -438,7 +440,7 @@ talentAcquisitionApp.controller('SearchController', function ($scope, $http) {
 });
 
 talentAcquisitionApp.controller('PanelSelectionController', function ($scope, $http, $filter) {
-    
+
     $("#ContainerForm").show();
     $("#footer").show();
     $(function () {
@@ -452,7 +454,7 @@ talentAcquisitionApp.controller('PanelSelectionController', function ($scope, $h
         if ($('#dateTimePickerCtrl').val() == null || $('#dateTimePickerCtrl').val() == "") {
             jQuery("label[for='lbldateTimePickerCtrlError']").html("This field is required");
             return false;
-        }      
+        }
 
         if ($("#candidateId_value").val() == "") {
             jQuery("label[for='lblSelectCandidateError']").html("Select candidate name");
@@ -465,7 +467,7 @@ talentAcquisitionApp.controller('PanelSelectionController', function ($scope, $h
             emailTo += element.email + ";";
             interviewerDetails.push({
                 empid: element.id, name: element.fullName, date: $filter('date')(new Date($('#dateTimePickerCtrl').val()), 'ddMMyyyy'),
-                time: $filter('date')(new Date($('#dateTimePickerCtrl').val()), 'HH:mm'),confirm:"",emailID:element.email
+                time: $filter('date')(new Date($('#dateTimePickerCtrl').val()), 'HH:mm'), confirm: "", emailID: element.email
             });
         }, this);
         if (emailTo == "") {
@@ -500,10 +502,10 @@ talentAcquisitionApp.controller('PanelSelectionController', function ($scope, $h
         $('#employeeSelected').append('<option value="" disabled>Select Employee(s) to Remove</option>');
         //location.reload();
     };
-        
+
     $scope.selectEmployee = function (msg) {
         if ($scope.selectedEmployee == undefined) {
-            jQuery("label[for='lblSelectPanelError']").html("Select employee to add");                
+            jQuery("label[for='lblSelectPanelError']").html("Select employee to add");
             return false;
         }
         else {
@@ -514,23 +516,23 @@ talentAcquisitionApp.controller('PanelSelectionController', function ($scope, $h
             $scope.selectedEmployee.originalObject.timeSlot = $('#dateTimePickerCtrl').val()
             $scope.selectedEmployees.push($scope.selectedEmployee.originalObject);
             displaySelectedEmployee($scope.selectedEmployee.originalObject);
-                
+
         }
         $("#ex1_value").val("");
         $scope.selectedEmployee = undefined;
     };
-        
+
     $scope.deleteEmployee = function (msg) {
-             
+
         if ($('#employeeSelected option:selected').length == 0) {
             jQuery("label[for='lblRemovePanelError']").html("Select employee(s) to remove");
             return false;
         }
         else {
             jQuery("label[for='lblRemovePanelError']").html("");
-        }    
+        }
         $('#employeeSelected option:selected').each(function () {
-                      
+
             var delEmployee = $(this).text();
             var tempArray = [];
             tempArray = $.grep($scope.selectedEmployees, function (a) {
@@ -540,11 +542,11 @@ talentAcquisitionApp.controller('PanelSelectionController', function ($scope, $h
             $(this).remove();
         });
     }
-        
+
     $scope.ClearDateTimePickerError = function (msg) {
         jQuery("label[for='lbldateTimePickerCtrlError']").html("");
     }
-        
+
     var employeeSelected = function (obj) {
         var result = false;
         $scope.selectedEmployees.forEach(function (element) {
@@ -554,18 +556,18 @@ talentAcquisitionApp.controller('PanelSelectionController', function ($scope, $h
         }, this);
         return result;
     }
-        
+
     var displaySelectedEmployee = function (obj) {
         var elem = document.getElementById("employeeSelected");
         var option = document.createElement("option");
         option.text = obj.fullName;
         elem.add(option);
     }
-        
+
     $http.get("http://localhost:3113/ShowEmployees/").then(function (response) {
         $scope.empData = response.data;
         $('#dateTimePickerCtrl').val("");
-    });   
+    });
 
     $http.get("http://localhost:3113/getcandidates/").then(function (response) {
         $scope.candidateData = response.data;
@@ -584,7 +586,7 @@ talentAcquisitionApp.controller('InterviewSchedulerController', function ($scope
     $scope.submitUrl = 'http://localhost:3113/schedulersubmit/';
     $scope.sendEmailUrl = 'http://localhost:3113/SendEmailFromScheduler/';
     $scope.hrEmailID = 'hrteam@wipro.com';
-    
+
     $scope.ClearDateTimePickerError = function (msg) {
         jQuery("label[for='lbldateTimePickerCtrlError1']").html("");
     }
@@ -629,7 +631,8 @@ talentAcquisitionApp.controller('InterviewSchedulerController', function ($scope
         };
 
         $http.post($scope.submitUrl, dataObj,
-            { headers: { 'Content-Type': 'application/json' }
+            {
+                headers: { 'Content-Type': 'application/json' }
             }).success(function (response) {
                 $scope.SendHttpPostData(dataObj);
                 alert("submitted successfully");
@@ -638,7 +641,7 @@ talentAcquisitionApp.controller('InterviewSchedulerController', function ($scope
             }).error(function (error) {
                 alert('An error occurred during submit process: ' + error);
             });
-        
+
     }
 
     $scope.SendHttpPostData = function (dataObj) {
@@ -650,8 +653,8 @@ talentAcquisitionApp.controller('InterviewSchedulerController', function ($scope
             mailSubject = 'Aptitude Test Date for candidate: ' + dataObj.candidateName
             if (dataObj.testDate != "") {
 
-                testUrl='http://localhost:11172/#/aptitudetest?cid=' + dataObj.candidateID + '&testdt=' + dataObj.formatDate + '&testtm=' + dataObj.formatTime
-                mailBody += "<p> You have a Aptitude test on: " + dataObj.testDate + ".<br/> Please click on the <a href=\"" + testUrl + "\">AptitudeTest</a>" 
+                testUrl = 'http://localhost:11172/#/aptitudetest?cid=' + dataObj.candidateID + '&testdt=' + dataObj.formatDate + '&testtm=' + dataObj.formatTime
+                mailBody += "<p> You have a Aptitude test on: " + dataObj.testDate + ".<br/> Please click on the <a href=\"" + testUrl + "\">AptitudeTest</a>"
             }
             //if (dataObj.date2 != "") {
             //    mailBody += '<p> You have a Aptitude test on: ' + dataObj.date2 + '.<br/> Please click on the link .<br/> http://localhost:41609/#/home?cid=' + dataObj.candidateID + '&testdt=' + dataObj.date2
@@ -683,7 +686,8 @@ talentAcquisitionApp.controller('InterviewSchedulerController', function ($scope
         };
 
         $http.post($scope.sendEmailUrl, req,
-            { headers: { 'Content-Type': 'application/json' }
+            {
+                headers: { 'Content-Type': 'application/json' }
             }).success(function (response) {
             }).error(function (response) {
                 alert("failure mail message: " + response);
@@ -703,7 +707,7 @@ talentAcquisitionApp.service('helperservice', function () {
     };
 });
 
-talentAcquisitionApp.controller('AptitudeTestController', ['$scope', '$location', '$http', 'helperservice', function ($scope, $location, $http, helper) {  
+talentAcquisitionApp.controller('AptitudeTestController', ['$scope', '$location', '$http', 'helperservice', function ($scope, $location, $http, helper) {
     $("#ContainerForm").show();
     $("#footer").show();
     $scope.questionUrl = 'http://localhost:3113/aptitudetest/';
