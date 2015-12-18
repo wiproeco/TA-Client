@@ -79,13 +79,28 @@ talentAcquisitionApp.controller('LoginController', function ($scope, $http) {
 
 });
 
+
+
 talentAcquisitionApp.controller('HomeController', function ($scope) {
     //debugger;
-    
-    var empType = appData[0].employeeType;
-    var empName = appData[0].fullName;
-    sessionStorage.setItem('userID', appData[0].id);
+    var empType = [];
+    var empName = [];
     var elem = document.getElementById("user");
+    var userId = sessionStorage.getItem('userID');
+    if (userId == null) {
+        empType = appData[0].employeeType;
+        empName = appData[0].fullName;
+        sessionStorage.setItem('empName', appData[0].fullName);
+        sessionStorage.setItem('empType', appData[0].employeeType);
+        sessionStorage.setItem('userID', appData[0].id);
+
+    }
+    else {
+        empType = sessionStorage.getItem('empType');
+        empName = sessionStorage.getItem('empName');
+
+    }
+
     elem.value = empName;
     //$("#User1").val() = empName;
     if (empType == "Candidate") {
@@ -96,8 +111,8 @@ talentAcquisitionApp.controller('HomeController', function ($scope) {
         $("#logoutScreen").show();
         $("#UserName").show();
         $("#interviewScreen").hide();
-        $("#technicalfeedback").hide();
         $("#employeeConfScreen").hide();
+        $("#technicalfeedback").hide();
         $("#footer").hide();
     }
     else if (empType == "HR") {
@@ -109,6 +124,7 @@ talentAcquisitionApp.controller('HomeController', function ($scope) {
         $("#logoutScreen").show();
         $("#UserName").show();
         $("#employeeConfScreen").hide();
+        $("#technicalfeedback").hide();
         $("#footer").hide();
     }
 
@@ -118,14 +134,14 @@ talentAcquisitionApp.controller('HomeController', function ($scope) {
         $("#searchScreen").hide();
         $("#panelScreen").hide();
         $("#interviewScreen").hide();
-        $("#technicalfeedback").show();
         $("#employeeConfScreen").show();
         $("#logoutScreen").show();
+        $("#technicalfeedback").show();
         $("#UserName").show();
         $("#footer").hide();
 
-    }   
-})
+    }
+});
 
 talentAcquisitionApp.controller('LogoutController', function ($scope) {
     //debugger;
@@ -287,6 +303,7 @@ talentAcquisitionApp.controller('RegistrationController', ['$scope', '$http', fu
 
 }]);
 
+
 talentAcquisitionApp.controller('SearchController', function ($scope, $http) {
     $("#ContainerForm").show();
     $("#footer").show();
@@ -336,10 +353,10 @@ talentAcquisitionApp.controller('SearchController', function ($scope, $http) {
 
 
         var exp = parseInt($scope.expyears) + (parseInt($scope.expmonths) * 0.1);
-        $http.get("http://localhost:3113/search/", { params: { "name": $scope.EmpName, "skillset": encodeURI($scope.skils), "qualification": $scope.Qualification, "fromdate": $scope.fromDate, "todate": $scope.toDate, "telephone": $scope.Telephone, "ratingininterview": $scope.Rating, "doj": $scope.DOJ, "currentlyworking": $scope.Currentlyworking, "exp": exp } })
+        $http.get("http://localhost:3113/search/", { params: { "name": $scope.EmpName, "email": $scope.email, "skillset": encodeURI($scope.skils), "qualification": $scope.Qualification, "fromdate": fromDate, "todate": toDate, "telephone": $scope.Telephone, "ratingininterview": $scope.Rating, "doj": $scope.DOJ, "currentlyworking": $scope.Currentlyworking, "exp": exp } })
        .success(function (response) {
            if (response.length > 0) {
-           $scope.result = response;           
+               $scope.result = response;
            } else {
                $scope.result = null;
            }
@@ -357,8 +374,13 @@ talentAcquisitionApp.controller('SearchController', function ($scope, $http) {
         $scope.Rating = '';
         $scope.DOJ = '';
         $scope.Currentlyworking = '';
+        $scope.email = '';
+        $scope.result = null;
+
     }
 });
+
+
 
 talentAcquisitionApp.controller('PanelSelectionController', function ($scope, $http, $filter) {
     
