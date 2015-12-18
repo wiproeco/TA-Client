@@ -464,7 +464,7 @@ talentAcquisitionApp.controller('PanelSelectionController', function ($scope, $h
         $scope.selectedEmployees.forEach(function (element) {
             emailTo += element.email + ";";
             interviewerDetails.push({
-                id: element.id, name: element.fullName, date: $filter('date')(new Date($('#dateTimePickerCtrl').val()), 'ddMMyyyy'),
+                empid: element.id, name: element.fullName, date: $filter('date')(new Date($('#dateTimePickerCtrl').val()), 'ddMMyyyy'),
                 time: $filter('date')(new Date($('#dateTimePickerCtrl').val()), 'HH:mm'),confirm:"",emailID:element.email
             });
         }, this);
@@ -492,6 +492,7 @@ talentAcquisitionApp.controller('PanelSelectionController', function ($scope, $h
                  { headers: { 'Content-Type': 'application/json' } })
         }
 
+        alert("submitted successfully");
         $("#ex1_value").val("");
         $("#candidateId_value").val("");
         $('#dateTimePickerCtrl').val("");
