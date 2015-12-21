@@ -88,6 +88,7 @@
     <Content Include="scripts\lib\angucomplete.js" />
     <Content Include="scripts\lib\datetimepicker.js" />
     <Content Include="scripts\lib\ui-bootstrap-tpls-0.14.3.min.js" />
+    <Content Include="SkillSet.xml" />
     <Content Include="views\EmployeeConfirmation.html" />
     <Content Include="views\Home.html" />
     <Content Include="views\login.html" />

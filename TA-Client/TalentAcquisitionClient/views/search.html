@@ -183,66 +183,72 @@
                     <button type="submit" class="btn btn-success" ng-disabled="myForm.$invalid" ng-click="click()">Search</button>
                     <button class="btn btn-success" ng-click="clear()">Clear</button>
                 </div>
-                <table>
-                    <thead>
-                        <tr>
+                <div style="overflow:auto">
+                    <table>
+                        <thead>
+                            <tr>
 
-                            <th align="left">Name</th>
-                            <th align="left">Email</th>
-                            <th align="left">SkillSet</th>
-                            <th align="left">Experience</th>
-                            <th align="left">Qualification</th>
-                            <th align="left">Current Employer</th>
-                            <th align="left">Telephone</th>
-                            <th align="left">AptitudeScore</th>
-                            <th align="left">TechnicalRating</th>
-                            <th align="left">Overall Rating</th>
-                            <th align="left">DateOfJoining</th>
-                            <th align="left">CurrentlyWorking</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="x in result">
-                            <td>
-                                {{x.fullName}}
-                            </td>
-                            <td>
-                                <a ng-href="http://localhost:11172/#/registration?email={{x.email}}"> {{x.email}} </a>
-                            </td>
-                            <td>
-                                {{x.skillSet}}
-                            </td>
-                            <td>
-                                {{x.experience}}
-                            </td>
+                                <th align="left">Name</th>
+                                <th align="left">Email</th>
+                                <th align="left">SkillSet</th>
+                                <th align="left">Experience</th>
+                                <th align="left">Qualification</th>
+                                <th align="left">Current Employer</th>
+                                <th align="left">Telephone</th>
+                                <th align="left">AptitudeScore</th>
+                                <th align="left">TechnicalRating</th>
+                                <th align="left">Overall Rating</th>
+                                <th align="left">Remarks</th>
+                                <th align="left">DateOfJoining</th>
+                                <th align="left">CurrentlyWorking</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="x in result">
+                                <td>
+                                    {{x.fullName}}
+                                </td>
+                                <td>
+                                    <a ng-href="http://localhost:11172/#/registration?email={{x.email}}"> {{x.email}} </a>
+                                </td>
+                                <td>
+                                    {{x.skillSet}}
+                                </td>
+                                <td>
+                                    {{x.experience}}
+                                </td>
 
-                            <td>
-                                {{x.qualification}}
-                            </td>
-                            <td>
-                                {{x.currentEmployer}}
-                            </td>
-                            <td>
-                                {{x.telephone}}
-                            </td>
-                            <td>
-                                {{x.aptitudeScore}}
-                            </td>
-                            <td>
-                                {{x.technicalRating}}
-                            </td>
-                            <td>
-                                {{x.overallRating}}
-                            </td>
-                            <td>
-                                {{x.DateOfJoining}}
-                            </td>
-                            <td>
-                                {{x.CurrentlyWorking}}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                                <td>
+                                    {{x.qualification}}
+                                </td>
+                                <td>
+                                    {{x.currentEmployer}}
+                                </td>
+                                <td>
+                                    {{x.telephone}}
+                                </td>
+                                <td>
+                                    {{x.aptitudeScore}}
+                                </td>
+                                <td>
+                                    {{x.technicalRating}}
+                                </td>
+                                <td>
+                                    {{x.overallRating}}
+                                </td>
+                                <td>
+                                    {{x.remarks}}
+                                </td>
+                                <td>
+                                    {{x.DateOfJoining}}
+                                </td>
+                                <td>
+                                    {{x.CurrentlyWorking}}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
         </form>
     </div>
 </div>

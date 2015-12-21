@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8" ?> 
+<!-- Last edited by http://encodedna.com -->
+
+<SkillSet>
+
+
+  <List>
+    <!--<option value="C#">C#</option>-->
+    <Subject>C#</Subject>
+    <value>C#</value>
+    <Id>1</Id>
+  </List>
+
+
+  <List>
+    <!--<option value="ASP.NET">ASP.NET</option>-->
+    <Subject>ASP.NET</Subject>
+    <value>ASP.NET</value>
+    <Id>2</Id>
+  </List>
+
+
+  <List>
+    <!--<option value="MVC">MVC</option>-->
+    <Subject>MVC</Subject>
+    <value>MVC</value>
+    <Id>3</Id>
+  </List>
+
+
+  <List>
+    <!--<option value="WCF">WCF</option>-->
+    <Subject>WCF</Subject>
+    <value>WCF</value>
+    <Id>4</Id>
+  </List>
+
+
+  <List>
+    <!--<option value="WPF">WPF</option>-->
+    <Subject>WPF</Subject>
+    <value>WPF</value>
+    <Id>5</Id>
+  </List>
+
+
+  <List>
+    <!--<option value="Java">Java</option>-->
+    <Subject>Java</Subject>
+    <value>Java</value>
+    <Id>6</Id>
+  </List>
+
+
+  <List>
+    <!--<option value="SAP">SAP</option>-->
+    <Subject>SAP</Subject>
+    <value>SAP</value>
+    <Id>7</Id>
+  </List>
+
+
+  <List>
+    <!--<option value="AngularJS">AngularJS</option>-->
+    <Subject>AngularJS</Subject>
+    <value>AngularJS</value>
+    <Id>8</Id>
+  </List>
+
+  <List>
+    <!--<option value="SilverLight">SilverLight</option>-->
+    <Subject>SilverLight</Subject>
+    <value>SilverLight</value>
+    <Id>9</Id>
+  </List>
+
+  <List>
+    <!--<option value="SQLServer">SQLServer</option>-->
+    <Subject>SQLServer</Subject>
+    <value>SQLServer</value>
+    <Id>10</Id>
+  </List>
+
+  <List>
+    <!--<option value="Oracle">Oracle</option>-->
+    <Subject>Oracle</Subject>
+    <value>Oracle</value>
+    <Id>11</Id>
+  </List>
+
+  <List>
+    <!--<option value="MySQL">MySQL</option>-->
+    <Subject>MySQL</Subject>
+    <value>MySQL</value>
+    <Id>12</Id>
+  </List>
+
+  <List>
+    <!--<option value="MySQL">MySQL</option>-->
+    <Subject>PHP</Subject>
+    <value>PHP</value>
+    <Id>13</Id>
+  </List>
+
+  <List>
+    <!--<option value="MySQL">MySQL</option>-->
+    <Subject>JavaScript</Subject>
+    <value>JavaScript</value>
+    <Id>14</Id>
+  </List>
+  
+</SkillSet>

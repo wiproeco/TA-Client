@@ -1,6 +1,6 @@
 ﻿
 
-<div class="container" ng-controller="RegistrationController">
+<div id="regform" class="container" ng-controller="RegistrationController">
     <div class="row well">
         <div class="page-header">
             <h1>Registration Form</h1>
@@ -49,6 +49,15 @@
                 <!--<p ng-show="regForm.email.$error.required" class="help-block">Email is required.</p>-->
             </div>
 
+            <div id="pancarddiv" class="form-group">
+                <label for="panCard" class="col-sm-2 control-label">Pan Card :</label>
+                <div class="col-sm-6">
+                    <input type="text" name="pancard" class="form-control" id="pancard" placeholder="PAN CARD" onblur="CheckPancard()" ng-model="candidate.pancard" ng-required="true" ng-maxlength="10">
+                </div>
+                <!--<p ng-show="regForm.email.$error.required" class="help-block">Email is required.</p>-->
+            </div>
+
+
             <div class="form-group" id="EmpTypeId">
                 <label class="col-sm-2 control-label">Type :</label>
                 <div class="col-sm-6">
@@ -74,10 +83,10 @@
                 <label for="" class="col-sm-2 control-label">Gender:</label>
                 <div class="col-sm-6">
                     <label class="radio-inline">
-                        <input type="radio" name="gender" id="gender" value="male" ng-model="candidate.gender" ng-required="true">Male
+                        <input type="radio" name="gender" ng-style="{-webkit-appearance: radio;}" id="gender" value="male" class="radiobtn" ng-model="candidate.gender" ng-required="true">Male
                     </label>
                     <label class="radio-inline">
-                        <input type="radio" name="gender" id="gender" value="female" ng-model="candidate.gender" ng-required="true">Female
+                        <input type="radio" name="gender" id="gender" ng-style="{-webkit-appearance: radio;}" class="radiobtn" value="female" ng-model="candidate.gender" ng-required="true">Female
                     </label>
                     <!--<p ng-show="regForm.gender.$error.required" class="help-block">Gender is required.</p>-->
                 </div>
@@ -106,17 +115,20 @@
             <div class="form-group">
                 <label for="skillSet" class="col-sm-2 control-label">Skill Sets:</label>
                 <div class="col-sm-6">
-                    <input type="text" name="skillSet" class="form-control" id="skillSet" placeholder="Skill Sets" ng-model="candidate.skillSet">
+                    <!--<input type="text" name="skillSet" class="form-control" id="skillSet" placeholder="Skill Sets" ng-model="candidate.skillSet">-->
+                    <select multiple="multiple" id="multipleSkillset" ng-model="candidate.skillSet" ng-options="b for b in list">
+                        <option value="">-- Select a Subject --</option>
+                    </select>
                 </div>
             </div>
             <div class="form-group">
                 <label for="lateralHire" class="col-sm-2 control-label">Lateral Hire:</label>
                 <div class="col-sm-6">
                     <label class="radio-inline">
-                        <input type="radio" name="lateralHire" id="lateralHireYes" value="Yes" ng-model="candidate.lateralHire" ng-required="true">Yes
+                        <input type="radio" name="lateralHire" id="lateralHireYes" ng-style="{-webkit-appearance: radio;}" class="radiobtn" value="Yes" ng-model="candidate.lateralHire" ng-required="true">Yes
                     </label>
                     <label class="radio-inline">
-                        <input type="radio" name="lateralHire" id="lateralHireNo" value="No" ng-model="candidate.lateralHire" ng-required="true">No
+                        <input type="radio" name="lateralHire" id="lateralHireNo" ng-style="{-webkit-appearance: radio;}" class="radiobtn" value="No" ng-model="candidate.lateralHire" ng-required="true">No
                     </label>
                     <!--<p ng-show="regForm.lateralHire.$error.required" class="help-block">Lateral Hire is required.</p>-->
                 </div>
@@ -131,10 +143,10 @@
                 <label for="agency" class="col-sm-2 control-label">Out Side Agency:</label>
                 <div class="col-sm-6">
                     <label class="radio-inline">
-                        <input type="radio" name="agency" id="agencyYes" value="agencyYes" ng-model="candidate.agency" ng-required="true">Yes
+                        <input type="radio" name="agency" ng-style="{-webkit-appearance: radio;}" class="radiobtn" id="agencyYes" value="agencyYes" ng-model="candidate.agency" ng-required="true">Yes
                     </label>
                     <label class="radio-inline">
-                        <input type="radio" name="agency" id="agencyNo" value="agencyNo" ng-model="candidate.agency" ng-required="true">No
+                        <input type="radio" name="agency" ng-style="{-webkit-appearance: radio;}" class="radiobtn" id="agencyNo" value="agencyNo" ng-model="candidate.agency" ng-required="true">No
                     </label>
                 </div>
             </div>
@@ -149,10 +161,10 @@
                 <label for="" class="col-sm-2 control-label">Referal:</label>
                 <div class="col-sm-6">
                     <label class="radio-inline">
-                        <input type="radio" name="referal" id="referalYes" value="referalYes" ng-model="candidate.referal">Yes
+                        <input type="radio" name="referal" id="referalYes" ng-style="{-webkit-appearance: radio;}" class="radiobtn" value="referalYes" ng-model="candidate.referal">Yes
                     </label>
                     <label class="radio-inline">
-                        <input type="radio" name="referal" id="referalNo" value="referalNo" ng-model="candidate.referal">No
+                        <input type="radio" name="referal" id="referalNo" ng-style="{-webkit-appearance: radio;}" class="radiobtn" value="referalNo" ng-model="candidate.referal">No
                     </label>
 
                 </div>
@@ -168,7 +180,7 @@
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
                     <button type="submit" class="btn btn-primary" id="register" ng-disabled="regForm.$invalid">Register</button>
-                    <button type="button" class="btn btn-primary" id="update" ng-click="updateCandidate()" >Update</button>
+                    <button type="button" class="btn btn-primary" id="update" ng-click="updateCandidate()">Update</button>
                 </div>
             </div>
 

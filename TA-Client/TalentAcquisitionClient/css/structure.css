@@ -12,7 +12,7 @@ body {
     height: 100%;
 }
 
-input, button, textarea {
+ button, textarea {
     -webkit-appearance: none;
 }
 
@@ -1007,3 +1007,4 @@ td {
 .highlight {
 	color: #ff0000;
 }
+
