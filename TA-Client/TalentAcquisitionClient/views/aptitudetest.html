@@ -70,14 +70,14 @@
 
             <div class="result" ng-show="mode=='result'">
                 <h2>Test Result</h2>
-                <label>Score:{{score}}</label>
+                <label>Score: {{scorePercent}}</label>
                 <h4 class="alert alert-info text-center">You may close this window now.</h4>
             </div>
 
             <div ng-show="mode!='result' &&  mode=='quiz' || mode=='review'" class="row">
                 <!--<div class="col-md-4">
 
-                </div>-->
+            </div>-->
                 <div class="col-sm-12">
                     <button class="btn btn-primary" ng-show="mode =='review'" ng-click="mode = 'quiz'">Quiz</button>
                     <button class="btn btn-primary" ng-show="currentPage==totalItems && mode=='quiz'" ng-click="mode = 'review'">Review</button>
@@ -85,8 +85,10 @@
                 </div>
             </div>
         </div>
-        <div ng-show="isTestDate==false">
-            <h3 class="label-warning msgWarning">The Aptitude test is accessible only on the allocated date.</h3>
+        <div class="row well" ng-show="isTestDate==false">
+            <div>
+                <span><b>The Aptitude test is accessible only on the allocated date.</b></span>
+            </div>
         </div>
     </div>
 
